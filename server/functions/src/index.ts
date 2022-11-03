@@ -48,7 +48,7 @@ export const onUserDeleted = functions
 export const onCheckCodesUpdated = functions
     .firestore
     .document("check_codes/{uid}")
-    .onUpdate(async (change, context) => {
+    .onUpdate(async (change, context): Promise<void> => {
       const {uid} = context.params;
       const {validated} = change.after.data();
 
@@ -66,7 +66,7 @@ export const onCheckCodesUpdated = functions
 export const onTransactionalMail = functions
     .firestore
     .document("transactional_mails/{transactionalMailId}")
-    .onCreate(async (snap, context) => {
+    .onCreate(async (snap, context): Promise<void> => {
       const {transactionalMailId} = context.params;
       const {userId: uid, sendAt} = snap.data();
 
