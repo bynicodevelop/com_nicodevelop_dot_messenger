@@ -17,7 +17,7 @@ admin.initializeApp();
 export const onUserCreated = functions.auth.user().onCreate(
     async ({uid, email}): Promise<void> => {
       if (email) {
-        const username = email?.split("@")[0];
+        const displayName = email?.split("@")[0];
 
         const code = await generateCodeVerification(
             uid,
@@ -26,10 +26,14 @@ export const onUserCreated = functions.auth.user().onCreate(
         await sendCodeVerification(email, code);
 
         await admin.auth().updateUser(uid, {
-          displayName: username,
+          displayName,
         });
 
-        info("User created", {uid, email, username});
+        await admin.firestore().collection("users").doc(uid).set({
+          displayName,
+        });
+
+        info("User created", {uid, email, displayName});
       }
     }
 );
