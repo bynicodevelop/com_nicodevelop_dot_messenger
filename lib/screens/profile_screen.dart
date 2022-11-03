@@ -23,7 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _displayNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 
-  double _responsiveWidth() {
+  double _responsiveWidth(BuildContext context) {
     if (ResponsiveComponent.device == DeviceEnum.desktop) {
       return MediaQuery.of(context).size.width * 0.35;
     }
@@ -40,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: _responsiveWidth(),
+          horizontal: _responsiveWidth(context),
         ),
         child: BlocListener<UpdateProfileBloc, UpdateProfileState>(
           listener: (context, state) {

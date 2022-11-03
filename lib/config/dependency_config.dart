@@ -5,6 +5,7 @@ import "package:com_nicodevelop_dotmessenger/firebase_options.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/chat_repository.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/group_repository.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/profile_repository.dart";
+import "package:com_nicodevelop_dotmessenger/repositories/search_repository.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/foundation.dart";
@@ -65,4 +66,10 @@ $initGetIt(
         FirebaseAuth.instance,
         FirebaseFirestore.instance,
       ));
+
+  gh.factory<SearchRepository>(
+    () => SearchRepository(
+      FirebaseFirestore.instance,
+    ),
+  );
 }
