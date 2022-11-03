@@ -66,6 +66,10 @@ class DesktopHomeScreen extends StatelessWidget {
                         final Map<String, dynamic> group =
                             (state as OpenChatInitialState).group;
 
+                        if (group.isEmpty) {
+                          return const SizedBox.shrink();
+                        }
+
                         return ChatHeadingBarComponent(
                           profile: {
                             "displayName": group["displayName"],
