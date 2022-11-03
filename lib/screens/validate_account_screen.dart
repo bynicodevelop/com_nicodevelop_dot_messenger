@@ -3,6 +3,7 @@ import "package:com_nicodevelop_dotmessenger/screens/home_screen.dart";
 import "package:com_nicodevelop_dotmessenger/services/auth/resend_confirm_mail/resend_confirm_mail_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/auth/validate_account/validate_account_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/utils/notice.dart";
+import "package:flutter/services.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter/material.dart";
 
@@ -74,6 +75,9 @@ class _ValidateAccountScreenState extends State<ValidateAccountScreen> {
           fontSize: 24,
         ),
         maxLength: 1,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.digitsOnly
+        ], // Only numbers can be entered
       ),
     );
   }
