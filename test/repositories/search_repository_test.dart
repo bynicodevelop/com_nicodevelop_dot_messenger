@@ -11,21 +11,21 @@ void main() {
     setUp(() async {
       final List<Map<String, dynamic>> users = [
         {
-          "id": "1",
+          "uid": "1",
           "displayName": "test",
         },
         {
-          "id": "2",
+          "uid": "2",
           "displayName": "test2",
         },
         {
-          "id": "3",
+          "uid": "3",
           "displayName": "john",
         },
       ];
 
       for (final Map<String, dynamic> user in users) {
-        await firestore.collection("users").doc(user["id"]).set(user);
+        await firestore.collection("users").doc(user["uid"]).set(user);
       }
     });
 
@@ -72,7 +72,7 @@ void main() {
       // ASSERT
       expect(result, [
         {
-          "id": "3",
+          "uid": "3",
           "displayName": "john",
         },
       ]);
@@ -90,11 +90,11 @@ void main() {
       // ASSERT
       expect(result, [
         {
-          "id": "1",
+          "uid": "1",
           "displayName": "test",
         },
         {
-          "id": "2",
+          "uid": "2",
           "displayName": "test2",
         },
       ]);

@@ -1,7 +1,10 @@
 import "dart:async";
 
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
+import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/search/search_query/search_query_bloc.dart";
+import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
+import "package:com_nicodevelop_dotmessenger/widgets/avatar_widget.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter/material.dart";
 
@@ -18,6 +21,12 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
+
+    context.read<SearchQueryBloc>().add(
+          const OnSearchQueryEvent(
+            query: "",
+          ),
+        );
 
     _searchController.addListener(() {
       if (_searchController.text.isNotEmpty ||
@@ -117,8 +126,34 @@ class _SearchScreenState extends State<SearchScreen> {
                     itemBuilder: (context, index) {
                       return Card(
                         child: ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            info("Select user", data: {
+                              ...state.result[index],
+                            });
+
+                            context.read<OpenGroupBloc>().add(OnOpenGroupEvent(
+                                  group: {
+                                    "recipient": {
+                                      "uid": state.result[index]["uid"],
+                                      // "displayName": state.result[index]
+                                      //     ["displayName"],
+                                      // "photoUrl": state.result[index]
+                                      //     ["avatarUrl"],
+                                    },
+                                    "displayName": state.result[index]
+                                        ["displayName"],
+                                    "photoUrl": state.result[index]
+                                        ["avatarUrl"],
+                                  },
+                                ));
+
+                            Navigator.pop(context);
+                          },
                           title: Text(state.result[index]["displayName"]),
+                          leading: AvatarWidget(
+                            avatarUrl: state.result[index]["avatarUrl"],
+                            username: state.result[index]["displayName"],
+                          ),
                           trailing: const Icon(
                             Icons.message_rounded,
                           ),

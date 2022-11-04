@@ -1,4 +1,5 @@
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
+import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
 import "package:com_nicodevelop_dotmessenger/widgets/avatar_widget.dart";
 import "package:flutter/material.dart";
 
@@ -12,6 +13,11 @@ class ChatHeadingBarComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    info(
+      "ChatHeadingBarComponent.build",
+      data: profile,
+    );
+
     if (profile.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -22,7 +28,7 @@ class ChatHeadingBarComponent extends StatelessWidget {
         children: [
           AvatarWidget(
             avatarUrl: profile["photoUrl"],
-            username: profile["username"],
+            username: profile["displayName"],
           ),
           const SizedBox(
             height: 10,
@@ -44,7 +50,7 @@ class ChatHeadingBarComponent extends StatelessWidget {
         children: [
           AvatarWidget(
             avatarUrl: profile["photoUrl"],
-            username: profile["username"],
+            username: profile["displayName"],
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -78,7 +84,7 @@ class ChatHeadingBarComponent extends StatelessWidget {
         children: [
           AvatarWidget(
             avatarUrl: profile["photoUrl"],
-            username: profile["username"],
+            username: profile["displayName"],
           ),
           const SizedBox(
             height: 10,

@@ -3,10 +3,11 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
 
+import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:com_nicodevelop_dotmessenger/repositories/search_repository.dart'
-    as _i2;
+    as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -20,20 +21,43 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeFirebaseFirestore_0 extends _i1.SmartFake
+    implements _i2.FirebaseFirestore {
+  _FakeFirebaseFirestore_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [SearchRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSearchRepository extends _i1.Mock implements _i2.SearchRepository {
+class MockSearchRepository extends _i1.Mock implements _i3.SearchRepository {
   @override
-  _i3.Future<List<Map<String, dynamic>>> search(Map<String, dynamic>? data) =>
+  _i2.FirebaseFirestore get firestore => (super.noSuchMethod(
+        Invocation.getter(#firestore),
+        returnValue: _FakeFirebaseFirestore_0(
+          this,
+          Invocation.getter(#firestore),
+        ),
+        returnValueForMissingStub: _FakeFirebaseFirestore_0(
+          this,
+          Invocation.getter(#firestore),
+        ),
+      ) as _i2.FirebaseFirestore);
+  @override
+  _i4.Future<List<Map<String, dynamic>>> search(Map<String, dynamic>? data) =>
       (super.noSuchMethod(
         Invocation.method(
           #search,
           [data],
         ),
-        returnValue: _i3.Future<List<Map<String, dynamic>>>.value(
+        returnValue: _i4.Future<List<Map<String, dynamic>>>.value(
             <Map<String, dynamic>>[]),
-        returnValueForMissingStub: _i3.Future<List<Map<String, dynamic>>>.value(
+        returnValueForMissingStub: _i4.Future<List<Map<String, dynamic>>>.value(
             <Map<String, dynamic>>[]),
-      ) as _i3.Future<List<Map<String, dynamic>>>);
+      ) as _i4.Future<List<Map<String, dynamic>>>);
 }

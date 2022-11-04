@@ -29,6 +29,12 @@ class _ChatMessageComponentState extends State<ChatMessageComponent> {
           );
         }
 
+        if (!group.containsKey("uid")) {
+          return const Center(
+            child: Text("New group"),
+          );
+        }
+
         return BlocBuilder<LoadMessagesBloc, LoadMessagesState>(
           bloc: context.read<LoadMessagesBloc>()
             ..add(OnLoadMessagesEvent(

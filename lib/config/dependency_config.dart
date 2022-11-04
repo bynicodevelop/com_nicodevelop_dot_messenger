@@ -59,7 +59,10 @@ $initGetIt(
   );
 
   gh.factory<ChatRepository>(
-    () => ChatRepository(),
+    () => ChatRepository(
+      FirebaseFirestore.instance,
+      FirebaseAuth.instance,
+    ),
   );
 
   gh.factory<ProfileRepository>(() => ProfileRepository(

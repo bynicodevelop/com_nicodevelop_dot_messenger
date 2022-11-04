@@ -11,6 +11,7 @@ import "package:com_nicodevelop_dotmessenger/services/auth/resend_confirm_mail/r
 import "package:com_nicodevelop_dotmessenger/services/auth/update_profile/update_profile_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/auth/validate_account/validate_account_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/chat/load_messages/load_messages_bloc.dart";
+import "package:com_nicodevelop_dotmessenger/services/chat/post_message/post_message_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/search/search_query/search_query_bloc.dart";
@@ -96,6 +97,11 @@ class ServiceFactory extends StatelessWidget {
         BlocProvider<SearchQueryBloc>(
           create: (_) => SearchQueryBloc(
             searchRepository,
+          ),
+        ),
+        BlocProvider<PostMessageBloc>(
+          create: (_) => PostMessageBloc(
+            chatRepository,
           ),
         ),
       ],

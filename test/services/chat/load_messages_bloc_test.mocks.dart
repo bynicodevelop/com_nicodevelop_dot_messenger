@@ -40,4 +40,16 @@ class MockChatRepository extends _i1.Mock implements _i2.ChatRepository {
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
+  @override
+  _i3.Future<Map<String, dynamic>> post(Map<String, dynamic>? data) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #post,
+          [data],
+        ),
+        returnValue:
+            _i3.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+        returnValueForMissingStub:
+            _i3.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+      ) as _i3.Future<Map<String, dynamic>>);
 }

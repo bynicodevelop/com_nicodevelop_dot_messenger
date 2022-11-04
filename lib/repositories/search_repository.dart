@@ -33,7 +33,7 @@ class SearchRepository {
 
     return snapshot.docs.map((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
       return {
-        "id": doc.id,
+        "uid": doc.id,
         "displayName": doc.data()["displayName"],
       };
     }).toList();
