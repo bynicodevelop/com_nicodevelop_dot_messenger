@@ -55,7 +55,10 @@ $initGetIt(
   final gh = GetItHelper(getIt, environment);
 
   gh.factory<GroupRepository>(
-    () => GroupRepository(),
+    () => GroupRepository(
+      FirebaseAuth.instance,
+      FirebaseFirestore.instance,
+    ),
   );
 
   gh.factory<ChatRepository>(

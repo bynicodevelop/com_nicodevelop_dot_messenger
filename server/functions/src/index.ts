@@ -30,7 +30,7 @@ export const onUserCreated = functions.auth.user().onCreate(
         });
 
         await admin.firestore().collection("users").doc(uid).set({
-          displayName,
+          displayName: displayName.toLowerCase(),
         });
 
         info("User created", {uid, email, displayName});
@@ -96,4 +96,51 @@ export const onTransactionalMail = functions
               sentAt: admin.firestore.FieldValue.serverTimestamp(),
             });
       }
+    });
+
+export const onGroupCreated = functions
+    .firestore
+    .document("groups/{groupId}")
+    .onCreate(async (snap, context): Promise<void> => {
+      const {groupId} = context.params;
+
+      const createdAt = admin.firestore.FieldValue.serverTimestamp();
+
+      await admin
+          .firestore()
+          .collection("groups")
+          .doc(groupId)
+          .update({
+            createdAt,
+            updatedAt: createdAt,
+          });
+    });
+
+export const onMessageCreated = functions
+    .firestore
+    .document("groups/{groupId}/messages/{messageId}")
+    .onCreate(async (snap, context): Promise<void> => {
+      const {groupId, messageId} = context.params;
+      const {message} = snap.data();
+
+      const createdAt = admin.firestore.FieldValue.serverTimestamp();
+
+      await admin
+          .firestore()
+          .collection("groups")
+          .doc(groupId)
+          .collection("messages")
+          .doc(messageId).update({
+            createdAt,
+            updatedAt: createdAt,
+          });
+
+      await admin
+          .firestore()
+          .collection("groups")
+          .doc(groupId)
+          .update({
+            lastMessage: message,
+            lastMessageTime: createdAt,
+          });
     });

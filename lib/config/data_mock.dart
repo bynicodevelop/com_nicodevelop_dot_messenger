@@ -124,7 +124,7 @@ final List<Map<String, dynamic>> message2 = [
 final List<Map<String, dynamic>> groupsList = [
   {
     "uid": "uid1",
-    "avatarUrl": "https://placekitten.com/250/250?img=johndoe",
+    "photoUrl": "https://placekitten.com/250/250?img=johndoe",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "John Doe",
@@ -133,7 +133,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid2",
-    "avatarUrl": "https://placekitten.com/250/250?img=2",
+    "photoUrl": "https://placekitten.com/250/250?img=2",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "Jane Doe",
@@ -142,7 +142,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid3",
-    "avatarUrl": "https://placekitten.com/250/250?img=3",
+    "photoUrl": "https://placekitten.com/250/250?img=3",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "Ricky Martin",
@@ -151,7 +151,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid4",
-    "avatarUrl": "https://placekitten.com/250/250?img=4",
+    "photoUrl": "https://placekitten.com/250/250?img=4",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "david Beckham",
@@ -160,7 +160,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid5",
-    "avatarUrl": "https://placekitten.com/250/250?img=5",
+    "photoUrl": "https://placekitten.com/250/250?img=5",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "federico",
@@ -169,7 +169,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid6",
-    "avatarUrl": "https://placekitten.com/250/250?img=6",
+    "photoUrl": "https://placekitten.com/250/250?img=6",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "John Doe",
@@ -178,7 +178,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid7",
-    "avatarUrl": "https://placekitten.com/250/250?img=7",
+    "photoUrl": "https://placekitten.com/250/250?img=7",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "John Doe",
@@ -187,7 +187,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid8",
-    "avatarUrl": "https://placekitten.com/250/250?img=8",
+    "photoUrl": "https://placekitten.com/250/250?img=8",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "John Doe",
@@ -196,7 +196,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid9",
-    "avatarUrl": "https://placekitten.com/250/250?img=9",
+    "photoUrl": "https://placekitten.com/250/250?img=9",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "John Doe",
@@ -205,7 +205,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid10",
-    "avatarUrl": "https://placekitten.com/250/250?img=1",
+    "photoUrl": "https://placekitten.com/250/250?img=1",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "John Doe",
@@ -214,7 +214,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid",
-    "avatarUrl": "https://placekitten.com/250/250?img=2",
+    "photoUrl": "https://placekitten.com/250/250?img=2",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "John Doe",
@@ -223,7 +223,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid",
-    "avatarUrl": "https://placekitten.com/250/250?img=3",
+    "photoUrl": "https://placekitten.com/250/250?img=3",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "John Doe",
@@ -232,7 +232,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid",
-    "avatarUrl": "https://placekitten.com/250/250?img=4",
+    "photoUrl": "https://placekitten.com/250/250?img=4",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "John Doe",
@@ -241,7 +241,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid",
-    "avatarUrl": "https://placekitten.com/250/250?img=5",
+    "photoUrl": "https://placekitten.com/250/250?img=5",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "John Doe",
@@ -250,7 +250,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid",
-    "avatarUrl": "https://placekitten.com/250/250?img=6",
+    "photoUrl": "https://placekitten.com/250/250?img=6",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "John Doe",
@@ -259,7 +259,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid",
-    "avatarUrl": "https://placekitten.com/250/250?img=7",
+    "photoUrl": "https://placekitten.com/250/250?img=7",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "John Doe",
@@ -268,7 +268,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid",
-    "avatarUrl": "https://placekitten.com/250/250?img=8",
+    "photoUrl": "https://placekitten.com/250/250?img=8",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "John Doe",
@@ -277,7 +277,7 @@ final List<Map<String, dynamic>> groupsList = [
   },
   {
     "uid": "uid",
-    "avatarUrl": "https://placekitten.com/250/250?img=9",
+    "photoUrl": "https://placekitten.com/250/250?img=9",
     "lastMessage": "Hey, how are you?",
     "lastMessageTime": "12:30",
     "displayName": "John Doe",

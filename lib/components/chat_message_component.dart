@@ -29,7 +29,9 @@ class _ChatMessageComponentState extends State<ChatMessageComponent> {
           );
         }
 
-        if (!group.containsKey("uid")) {
+        if (!group.containsKey("uid") ||
+            group["uid"] == null ||
+            group["uid"].isEmpty) {
           return const Center(
             child: Text("New group"),
           );

@@ -4,6 +4,7 @@ import "package:com_nicodevelop_dotmessenger/responsive/mobile/components/mobile
 import "package:com_nicodevelop_dotmessenger/responsive/mobile/screens/mobile_chat_screen.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
+import 'package:com_nicodevelop_dotmessenger/utils/helpers.dart';
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter/material.dart";
 
@@ -61,7 +62,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
                           group: {
                             "uid": group["uid"],
                             "displayName": group["displayName"],
-                            "photoUrl": group["avatarUrl"],
+                            "photoUrl": group["photoUrl"],
                           },
                         ));
 

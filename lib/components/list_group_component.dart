@@ -45,14 +45,18 @@ class _ListGroupComponentState extends State<ListGroupComponent> {
           : null,
       itemCount: widget.groups.length,
       itemBuilder: (BuildContext context, int index) {
+        final Map<String, dynamic> group = widget.groups[index];
+
+        final Map<String, dynamic> user =
+            group["users"].firstWhere((user) => user["currentUser"] != true);
+
         return ItemGroupWidget(
-          onTap: () =>
-              widget.onTap != null ? widget.onTap!(widget.groups[index]) : null,
-          avatarUrl: widget.groups[index]["avatarUrl"],
-          displayName: widget.groups[index]["displayName"],
+          onTap: () => widget.onTap != null ? widget.onTap!(group) : null,
+          avatarUrl: user["photoUrl"],
+          displayName: user["displayName"],
           lastMessage: widget.groups[index]["lastMessage"],
           lastMessageTime: widget.groups[index]["lastMessageTime"],
-          isReaded: widget.groups[index]["isReaded"],
+          isReaded: false, // widget.groups[index]["isReaded"] ?? false,
         );
       },
     );

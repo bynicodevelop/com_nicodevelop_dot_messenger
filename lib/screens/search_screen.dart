@@ -1,8 +1,8 @@
 import "dart:async";
 
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
-import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/search/search_query/search_query_bloc.dart";
+import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
 import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
 import "package:com_nicodevelop_dotmessenger/widgets/avatar_widget.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
@@ -131,27 +131,22 @@ class _SearchScreenState extends State<SearchScreen> {
                               ...state.result[index],
                             });
 
-                            context.read<OpenGroupBloc>().add(OnOpenGroupEvent(
-                                  group: {
-                                    "recipient": {
-                                      "uid": state.result[index]["uid"],
-                                      // "displayName": state.result[index]
-                                      //     ["displayName"],
-                                      // "photoUrl": state.result[index]
-                                      //     ["avatarUrl"],
-                                    },
-                                    "displayName": state.result[index]
-                                        ["displayName"],
-                                    "photoUrl": state.result[index]
-                                        ["avatarUrl"],
-                                  },
-                                ));
+                            openGroup(context, {
+                              "users": [
+                                {
+                                  "uid": state.result[index]["uid"],
+                                  "displayName": state.result[index]
+                                      ["displayName"],
+                                  "photoURL": state.result[index]["photoURL"],
+                                }
+                              ],
+                            });
 
                             Navigator.pop(context);
                           },
                           title: Text(state.result[index]["displayName"]),
                           leading: AvatarWidget(
-                            avatarUrl: state.result[index]["avatarUrl"],
+                            avatarUrl: state.result[index]["photoUrl"],
                             username: state.result[index]["displayName"],
                           ),
                           trailing: const Icon(

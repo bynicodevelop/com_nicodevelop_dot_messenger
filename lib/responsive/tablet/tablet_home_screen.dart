@@ -8,6 +8,7 @@ import "package:com_nicodevelop_dotmessenger/components/validate_account_compone
 import "package:com_nicodevelop_dotmessenger/services/chat/post_message/post_message_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
+import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
 import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
 import "package:com_nicodevelop_dotmessenger/utils/notice.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
@@ -40,22 +41,10 @@ class TabletHomeScreen extends StatelessWidget {
                       onInit: () {
                         info("Select first group from the list");
 
-                        context.read<OpenGroupBloc>().add(OnOpenGroupEvent(
-                              group: {
-                                "uid": groups[0]["uid"],
-                                "displayName": groups[0]["displayName"],
-                                "photoUrl": groups[0]["avatarUrl"],
-                              },
-                            ));
+                        openGroup(context, groups[0]);
                       },
                       onTap: (Map<String, dynamic> group) {
-                        context.read<OpenGroupBloc>().add(OnOpenGroupEvent(
-                              group: {
-                                "uid": group["uid"],
-                                "displayName": group["displayName"],
-                                "photoUrl": group["avatarUrl"],
-                              },
-                            ));
+                        openGroup(context, group);
                       },
                     );
                   },
@@ -73,11 +62,15 @@ class TabletHomeScreen extends StatelessWidget {
                       );
                     }
 
+                    final Map<String, dynamic> user = group["users"].firstWhere(
+                      (user) => user["currentUser"] != true,
+                    );
+
                     return ChatScaffoldComponent(
                       heading: ChatHeadingBarComponent(
                         profile: {
-                          "displayName": group["displayName"],
-                          "photoUrl": group["photoUrl"],
+                          "displayName": user["displayName"],
+                          "photoUrl": user["photoUrl"],
                         },
                       ),
                       messages: const ChatMessageComponent(),
@@ -94,14 +87,18 @@ class TabletHomeScreen extends StatelessWidget {
                           onSend: (message) {
                             info("Send message", data: {
                               "message": message,
-                              "recipient": group["recipient"],
+                              "recipient": group["users"].firstWhere(
+                                (user) => user["current"] != true,
+                              ),
                               "groupId": group["uid"],
                             });
 
                             context.read<PostMessageBloc>().add(
                                   OnPostMessageEvent(
                                     data: {
-                                      "recipient": group["recipient"],
+                                      "recipient": group["users"].firstWhere(
+                                        (user) => user["current"] != true,
+                                      ),
                                       "groupId": group["uid"],
                                       "message": message,
                                     },

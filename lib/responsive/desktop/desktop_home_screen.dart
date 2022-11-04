@@ -7,6 +7,7 @@ import "package:com_nicodevelop_dotmessenger/components/message_editor_component
 import "package:com_nicodevelop_dotmessenger/components/validate_account_component.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
+import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 
@@ -34,15 +35,7 @@ class DesktopHomeScreen extends StatelessWidget {
                     }
 
                     return ListGroupComponent(
-                      onInit: () {
-                        context.read<OpenGroupBloc>().add(OnOpenGroupEvent(
-                              group: {
-                                "uid": groups[0]["uid"],
-                                "displayName": groups[0]["displayName"],
-                                "photoUrl": groups[0]["avatarUrl"],
-                              },
-                            ));
-                      },
+                      onInit: () => openGroup(context, groups[0]),
                       groups: groups,
                     );
                   },

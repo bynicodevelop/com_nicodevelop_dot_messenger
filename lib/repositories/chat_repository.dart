@@ -65,8 +65,6 @@ class ChatRepository {
       );
     }
 
-    final DateTime now = DateTime.now();
-
     if (!data.containsKey("groupId") || data["groupId"] == null) {
       info("Creating group", data: {
         "users": [
@@ -83,8 +81,6 @@ class ChatRepository {
           user.uid,
           data["recipient"]["uid"],
         ],
-        "createdAt": now,
-        "updatedAt": now,
       });
     }
 
@@ -95,8 +91,6 @@ class ChatRepository {
         .add({
       "message": data["message"],
       "sender": user.uid,
-      "createdAt": now,
-      "updatedAt": now,
     });
 
     return {};
