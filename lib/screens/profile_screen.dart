@@ -2,6 +2,7 @@ import "package:com_nicodevelop_dotmessenger/components/auth_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/buttons/delete_account_button_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/input_edit_field_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
+import "package:com_nicodevelop_dotmessenger/screens/login_screen.dart";
 import "package:com_nicodevelop_dotmessenger/screens/validate_account_screen.dart";
 import "package:com_nicodevelop_dotmessenger/services/auth/logout/logout_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/auth/profile/profile_bloc.dart";
@@ -134,8 +135,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                       ),
-                      const InputDecoratorWidget(
-                        child: DeleteAccountButtonComponent(),
+                      InputDecoratorWidget(
+                        child: DeleteAccountButtonComponent(
+                          onDeleted: () async => Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                            (route) => false,
+                          ),
+                        ),
                       ),
                     ],
                   ),
