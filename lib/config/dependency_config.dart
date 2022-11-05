@@ -76,6 +76,7 @@ $initGetIt(
   gh.factory<SearchRepository>(
     () => SearchRepository(
       FirebaseFirestore.instance,
+      FirebaseAuth.instance,
     ),
   );
 }

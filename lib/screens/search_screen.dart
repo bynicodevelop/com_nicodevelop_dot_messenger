@@ -7,6 +7,7 @@ import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
 import "package:com_nicodevelop_dotmessenger/widgets/avatar_widget.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter/material.dart";
+import "package:validators/sanitizers.dart";
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -127,11 +128,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       return Card(
                         child: ListTile(
                           onTap: () {
-                            info("Select user", data: {
-                              ...state.result[index],
-                            });
-
-                            openGroup(context, {
+                            Map<String, dynamic> openDiscussion = {
                               "users": [
                                 {
                                   "uid": state.result[index]["uid"],
@@ -140,7 +137,20 @@ class _SearchScreenState extends State<SearchScreen> {
                                   "photoURL": state.result[index]["photoURL"],
                                 }
                               ],
-                            });
+                            };
+
+                            if (state.result[index]["groupId"] != null &&
+                                trim(state.result[index]["groupId"]) != "") {
+                              openDiscussion["uid"] =
+                                  state.result[index]["groupId"];
+                            }
+
+                            info(
+                              "Open discussion with user",
+                              data: openDiscussion,
+                            );
+
+                            openGroup(context, openDiscussion);
 
                             Navigator.pop(context);
                           },

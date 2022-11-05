@@ -22,6 +22,11 @@ class ChatRepository {
   Stream<List<Map<String, dynamic>>> get messages => _messagesController.stream;
 
   Future<void> load(Map<String, dynamic> data) async {
+    info(
+      "ChatRepository.load",
+      data: data,
+    );
+
     final User? user = auth.currentUser;
 
     if (user == null) {

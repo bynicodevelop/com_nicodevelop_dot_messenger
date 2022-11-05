@@ -48,15 +48,22 @@ class SearchRepository {
             .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) async {
       final QuerySnapshot<Map<String, dynamic>> groupSnapshot = await firestore
           .collection("groups")
-          .where("users", arrayContainsAny: [user.uid, doc.id]).get();
+          .where("users", arrayContainsAny: [doc.id]).get();
 
       final Map<String, dynamic> profile = {
         "uid": doc.id,
         "displayName": doc.data()["displayName"],
       };
 
-      if (groupSnapshot.docs.isNotEmpty) {
-        profile["groupId"] = groupSnapshot.docs.first.id;
+      final List<QueryDocumentSnapshot<Map<String, dynamic>>> groupsRelation =
+          groupSnapshot.docs
+              .where(
+                (groupData) => (groupData["users"] as List).contains(user.uid),
+              )
+              .toList();
+
+      if (groupsRelation.isNotEmpty) {
+        profile["groupId"] = groupsRelation.first.id;
       }
 
       return profile;

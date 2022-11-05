@@ -1,6 +1,9 @@
 // ignore: depend_on_referenced_packages
 import "package:bloc/bloc.dart";
+import "package:com_nicodevelop_dotmessenger/exceptions/authentication_exception.dart";
+import "package:com_nicodevelop_dotmessenger/exceptions/chat_exception.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/chat_repository.dart";
+import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
 import "package:equatable/equatable.dart";
 
 part "load_messages_event.dart";
@@ -24,11 +27,25 @@ class LoadMessagesBloc extends Bloc<LoadMessagesEvent, LoadMessagesState> {
         messages: (state as LoadMessagesInitialState).messages,
       ));
 
-      await chatRepository.load(
-        {
+      try {
+        await chatRepository.load({
           "groupId": event.groupId,
-        },
-      );
+        });
+      } on ChatException catch (e) {
+        warn(
+          "LoadMessagesBloc.on<OnLoadMessagesEvent>",
+          data: {
+            "code": e.code,
+          },
+        );
+      } on AuthenticationException catch (e) {
+        warn(
+          "LoadMessagesBloc.on<OnLoadMessagesEvent>",
+          data: {
+            "code": e.code,
+          },
+        );
+      }
     });
     on<OnLoadedMessagesEvent>((event, emit) async {
       emit(LoadMessagesInitialState(
