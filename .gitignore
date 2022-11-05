@@ -60,3 +60,5 @@ server/functions/node_modules
 server/functions/assets/mails/build_local
 server/functions/assets/mails/templates
 server/functions/assets/mails/node_modules
+
+coverage/

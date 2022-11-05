@@ -3,6 +3,8 @@ import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
 import "package:com_nicodevelop_dotmessenger/widgets/avatar_widget.dart";
 import "package:flutter/material.dart";
 
+import "package:com_nicodevelop_dotmessenger/utils/string_casting_extension.dart";
+
 class ChatHeadingBarComponent extends StatelessWidget {
   final Map<String, dynamic> profile;
 
@@ -34,7 +36,7 @@ class ChatHeadingBarComponent extends StatelessWidget {
             height: 10,
           ),
           Text(
-            profile["displayName"].toTitleCase(),
+            (profile["displayName"] as String).toTitleCase(),
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w300,
@@ -60,7 +62,7 @@ class ChatHeadingBarComponent extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  profile["displayName"].toTitleCase(),
+                  (profile["displayName"] as String).toTitleCase(),
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w300,
@@ -90,7 +92,7 @@ class ChatHeadingBarComponent extends StatelessWidget {
             height: 10,
           ),
           Text(
-            profile["displayName"],
+            (profile["displayName"] as String).toTitleCase(),
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w300,
