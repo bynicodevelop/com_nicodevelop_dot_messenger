@@ -3,10 +3,12 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
+import 'dart:async' as _i5;
 
+import 'package:cloud_firestore/cloud_firestore.dart' as _i3;
 import 'package:com_nicodevelop_dotmessenger/repositories/group_repository.dart'
-    as _i2;
+    as _i4;
+import 'package:firebase_auth/firebase_auth.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -20,24 +22,69 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeFirebaseAuth_0 extends _i1.SmartFake implements _i2.FirebaseAuth {
+  _FakeFirebaseAuth_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeFirebaseFirestore_1 extends _i1.SmartFake
+    implements _i3.FirebaseFirestore {
+  _FakeFirebaseFirestore_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [GroupRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGroupRepository extends _i1.Mock implements _i2.GroupRepository {
+class MockGroupRepository extends _i1.Mock implements _i4.GroupRepository {
   @override
-  _i3.Stream<List<Map<String, dynamic>>> get groups => (super.noSuchMethod(
+  _i2.FirebaseAuth get auth => (super.noSuchMethod(
+        Invocation.getter(#auth),
+        returnValue: _FakeFirebaseAuth_0(
+          this,
+          Invocation.getter(#auth),
+        ),
+        returnValueForMissingStub: _FakeFirebaseAuth_0(
+          this,
+          Invocation.getter(#auth),
+        ),
+      ) as _i2.FirebaseAuth);
+  @override
+  _i3.FirebaseFirestore get firestore => (super.noSuchMethod(
+        Invocation.getter(#firestore),
+        returnValue: _FakeFirebaseFirestore_1(
+          this,
+          Invocation.getter(#firestore),
+        ),
+        returnValueForMissingStub: _FakeFirebaseFirestore_1(
+          this,
+          Invocation.getter(#firestore),
+        ),
+      ) as _i3.FirebaseFirestore);
+  @override
+  _i5.Stream<List<Map<String, dynamic>>> get groups => (super.noSuchMethod(
         Invocation.getter(#groups),
-        returnValue: _i3.Stream<List<Map<String, dynamic>>>.empty(),
+        returnValue: _i5.Stream<List<Map<String, dynamic>>>.empty(),
         returnValueForMissingStub:
-            _i3.Stream<List<Map<String, dynamic>>>.empty(),
-      ) as _i3.Stream<List<Map<String, dynamic>>>);
+            _i5.Stream<List<Map<String, dynamic>>>.empty(),
+      ) as _i5.Stream<List<Map<String, dynamic>>>);
   @override
-  _i3.Future<void> load() => (super.noSuchMethod(
+  _i5.Future<void> load() => (super.noSuchMethod(
         Invocation.method(
           #load,
           [],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 }

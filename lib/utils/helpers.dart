@@ -17,8 +17,8 @@ void sendMessage(
   Map<String, dynamic> group,
   String message,
 ) {
-  final Map<String, dynamic> user = group["users"].firstWhere(
-    (Map<String, dynamic> user) => user["current"] != true,
+  final Map<String, dynamic> user = excludeCurrentUser(
+    group["users"],
   );
 
   final Map<String, dynamic> messageData = {
@@ -34,4 +34,13 @@ void sendMessage(
           data: messageData,
         ),
       );
+}
+
+Map<String, dynamic> excludeCurrentUser(
+  List<Map<String, dynamic>> users, {
+  String property = "currentUser",
+}) {
+  return users.firstWhere(
+    (Map<String, dynamic> user) => user[property] != true,
+  );
 }

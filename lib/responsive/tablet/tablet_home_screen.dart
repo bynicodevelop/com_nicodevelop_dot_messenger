@@ -63,8 +63,8 @@ class TabletHomeScreen extends StatelessWidget {
                       );
                     }
 
-                    final Map<String, dynamic> user = group["users"].firstWhere(
-                      (user) => user["currentUser"] != true,
+                    final Map<String, dynamic> user = excludeCurrentUser(
+                      group["users"],
                     );
 
                     return ChatScaffoldComponent(

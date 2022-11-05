@@ -2,6 +2,7 @@ import "package:com_nicodevelop_dotmessenger/components/buttons/settings_button_
 import "package:com_nicodevelop_dotmessenger/components/chat_heading_bar_component.dart";
 import "package:com_nicodevelop_dotmessenger/responsive/mobile/screens/mobile_profile_screen.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
+import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
 import "package:com_nicodevelop_dotmessenger/widgets/blurry_heading_widget.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
@@ -57,9 +58,8 @@ class MobileAppBarComponent extends StatelessWidget
                   final Map<String, dynamic> group =
                       (state as OpenChatInitialState).group;
 
-                  Map<String, dynamic> user = group["users"].firstWhere(
-                    (Map<String, dynamic> user) => user["uid"] != true,
-                  );
+                  Map<String, dynamic> user =
+                      excludeCurrentUser(group["users"]);
 
                   return Stack(
                     alignment: Alignment.center,

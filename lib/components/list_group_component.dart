@@ -1,4 +1,5 @@
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
+import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
 import "package:com_nicodevelop_dotmessenger/widgets/item_group_widget.dart";
 import "package:flutter/material.dart";
 
@@ -47,8 +48,9 @@ class _ListGroupComponentState extends State<ListGroupComponent> {
       itemBuilder: (BuildContext context, int index) {
         final Map<String, dynamic> group = widget.groups[index];
 
-        final Map<String, dynamic> user =
-            group["users"].firstWhere((user) => user["currentUser"] != true);
+        final Map<String, dynamic> user = excludeCurrentUser(
+          group["users"],
+        );
 
         return ItemGroupWidget(
           onTap: () => widget.onTap != null ? widget.onTap!(group) : null,

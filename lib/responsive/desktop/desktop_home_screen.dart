@@ -5,11 +5,9 @@ import "package:com_nicodevelop_dotmessenger/components/left_column_constrained_
 import "package:com_nicodevelop_dotmessenger/components/list_group_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/message_editor_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/validate_account_component.dart";
-import "package:com_nicodevelop_dotmessenger/services/chat/post_message/post_message_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
-import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 
@@ -79,9 +77,7 @@ class DesktopHomeScreen extends StatelessWidget {
                         }
 
                         final Map<String, dynamic> user =
-                            group["users"].firstWhere(
-                          (user) => user["uid"] != true,
-                        );
+                            excludeCurrentUser(group["users"]);
 
                         return ChatHeadingBarComponent(
                           profile: {
