@@ -2,7 +2,7 @@ import "dart:async";
 
 import "package:clock/clock.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:com_nicodevelop_dotmessenger/exceptions/authentication_exception.dart";
+import "package:com_nicodevelop_dotmessenger/utils/unauthenticated_helper.dart";
 import "package:firebase_auth/firebase_auth.dart";
 
 class GroupRepository {
@@ -22,12 +22,7 @@ class GroupRepository {
   Future<void> load() async {
     final User? user = auth.currentUser;
 
-    if (user == null) {
-      throw const AuthenticationException(
-        "User is not authenticated",
-        "unauthenticated",
-      );
-    }
+    isUnauthenticated(auth);
 
     final Stream<QuerySnapshot<Map<String, dynamic>>> groupsQuerySnapshot =
         firestore
@@ -38,7 +33,7 @@ class GroupRepository {
             )
             .where(
               "users",
-              arrayContains: user.uid,
+              arrayContains: user!.uid,
             )
             .snapshots();
 

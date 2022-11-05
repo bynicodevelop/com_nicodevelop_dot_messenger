@@ -1,9 +1,9 @@
 import "dart:async";
 
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:com_nicodevelop_dotmessenger/exceptions/authentication_exception.dart";
 import "package:com_nicodevelop_dotmessenger/exceptions/chat_exception.dart";
 import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
+import "package:com_nicodevelop_dotmessenger/utils/unauthenticated_helper.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:validators/sanitizers.dart";
 
@@ -29,12 +29,7 @@ class ChatRepository {
 
     final User? user = auth.currentUser;
 
-    if (user == null) {
-      throw const AuthenticationException(
-        "User not connected",
-        "unauthenticated",
-      );
-    }
+    isUnauthenticated(auth);
 
     if (!data.containsKey("groupId")) {
       throw const ChatException(
@@ -57,7 +52,7 @@ class ChatRepository {
 
     final Map<String, dynamic> group = groupDocumentSnapshot.data()!;
 
-    if (!group["users"].contains(user.uid)) {
+    if (!group["users"].contains(user!.uid)) {
       throw const ChatException(
         "Group users not found",
         "group_users_not_found",
@@ -91,12 +86,7 @@ class ChatRepository {
   Future<Map<String, dynamic>> post(Map<String, dynamic> data) async {
     final User? user = auth.currentUser;
 
-    if (user == null) {
-      throw const AuthenticationException(
-        "User is not authenticated",
-        "unauthenticated",
-      );
-    }
+    isUnauthenticated(auth);
 
     if (!data.containsKey("message") || trim(data["message"]).isEmpty) {
       throw const ChatException(
@@ -117,7 +107,7 @@ class ChatRepository {
     if (!data.containsKey("groupId") || data["groupId"] == null) {
       info("Creating group", data: {
         "users": [
-          user.uid,
+          user!.uid,
           data["recipient"]["uid"],
         ],
       });
@@ -139,7 +129,7 @@ class ChatRepository {
         .collection("messages")
         .add({
       "message": data["message"],
-      "sender": user.uid,
+      "sender": user!.uid,
     });
 
     return {};

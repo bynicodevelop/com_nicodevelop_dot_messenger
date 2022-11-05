@@ -1,18 +1,18 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:com_nicodevelop_dotmessenger/exceptions/authentication_exception.dart";
 import "package:com_nicodevelop_dotmessenger/exceptions/update_profile_exception.dart";
 import "package:com_nicodevelop_dotmessenger/exceptions/validate_account_exception.dart";
 import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
+import "package:com_nicodevelop_dotmessenger/utils/unauthenticated_helper.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:validators/sanitizers.dart";
 import "package:validators/validators.dart";
 
 class ProfileRepository {
-  final FirebaseAuth firebaseAuth;
+  final FirebaseAuth auth;
   final FirebaseFirestore firestore;
 
   const ProfileRepository(
-    this.firebaseAuth,
+    this.auth,
     this.firestore,
   );
 
@@ -34,27 +34,16 @@ class ProfileRepository {
     }
   }
 
-  void _isAuthenticatedUser() {
-    final User? user = firebaseAuth.currentUser;
-
-    if (user == null) {
-      throw const AuthenticationException(
-        "User is not authenticated",
-        "unauthenticated_user",
-      );
-    }
-  }
-
   Future<User?> get user async {
-    await firebaseAuth.currentUser?.reload();
+    await auth.currentUser?.reload();
 
-    return firebaseAuth.currentUser;
+    return auth.currentUser;
   }
 
   Future<void> validateEmail(Map<String, dynamic> data) async {
-    final User? user = firebaseAuth.currentUser;
+    final User? user = auth.currentUser;
 
-    _isAuthenticatedUser();
+    isUnauthenticated(auth);
 
     if (data["code"] == null || trim(data["code"]).isEmpty) {
       warn("Code is required", data: data);
@@ -92,13 +81,13 @@ class ProfileRepository {
     _isRequiredField(data["password"], "password");
 
     try {
-      await firebaseAuth.signInWithEmailAndPassword(
+      await auth.signInWithEmailAndPassword(
         email: data["email"],
         password: data["password"],
       );
 
       info("Login success");
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseException catch (e) {
       warn("Login error", data: {
         "code": e.code,
         "message": e.message,
@@ -114,7 +103,7 @@ class ProfileRepository {
   Future<void> logout() async {
     info("Logout");
 
-    await firebaseAuth.signOut();
+    await auth.signOut();
   }
 
   Future<void> register(Map<String, dynamic> data) async {
@@ -123,13 +112,13 @@ class ProfileRepository {
     _isRequiredField(data["password"], "password");
 
     try {
-      await firebaseAuth.createUserWithEmailAndPassword(
+      await auth.createUserWithEmailAndPassword(
         email: data["email"],
         password: data["password"],
       );
 
       info("Register success");
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseException catch (e) {
       warn("Register error", data: {
         "code": e.code,
         "message": e.message,
@@ -143,9 +132,9 @@ class ProfileRepository {
   }
 
   Future<void> update(Map<String, dynamic> data) async {
-    final User? user = firebaseAuth.currentUser;
+    final User? user = auth.currentUser;
 
-    _isAuthenticatedUser();
+    isUnauthenticated(auth);
 
     _isVadidEmail(data["email"]);
 
@@ -175,9 +164,9 @@ class ProfileRepository {
   }
 
   Future<void> resendConfirmMail() async {
-    final User? user = firebaseAuth.currentUser;
+    final User? user = auth.currentUser;
 
-    _isAuthenticatedUser();
+    isUnauthenticated(auth);
 
     await firestore.collection("transactional_mails").add({
       "userId": user!.uid,
@@ -190,9 +179,9 @@ class ProfileRepository {
   }
 
   Future<void> deleteAccount() async {
-    final User? user = firebaseAuth.currentUser;
+    final User? user = auth.currentUser;
 
-    _isAuthenticatedUser();
+    isUnauthenticated(auth);
 
     await user!.delete();
 

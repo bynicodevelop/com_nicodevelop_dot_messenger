@@ -460,7 +460,7 @@ void main() {
         }),
         throwsA(
           isA<AuthenticationException>()
-              .having((e) => e.code, "code", "unauthenticated_user"),
+              .having((e) => e.code, "code", "unauthenticated"),
         ),
       );
     });
@@ -757,7 +757,7 @@ void main() {
           isA<AuthenticationException>().having(
             (e) => e.code,
             "code",
-            "unauthenticated_user",
+            "unauthenticated",
           ),
         ),
       );
@@ -817,7 +817,7 @@ void main() {
           isA<AuthenticationException>().having(
             (e) => e.code,
             "code",
-            "unauthenticated_user",
+            "unauthenticated",
           ),
         ),
       );
@@ -877,7 +877,7 @@ void main() {
           isA<AuthenticationException>().having(
             (e) => e.code,
             "code",
-            "unauthenticated_user",
+            "unauthenticated",
           ),
         ),
       );

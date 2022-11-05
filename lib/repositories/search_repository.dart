@@ -1,7 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:com_nicodevelop_dotmessenger/exceptions/authentication_exception.dart";
 import "package:com_nicodevelop_dotmessenger/exceptions/search_exception.dart";
 import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
+import "package:com_nicodevelop_dotmessenger/utils/unauthenticated_helper.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:validators/sanitizers.dart";
 
@@ -17,12 +17,7 @@ class SearchRepository {
   Future<List<Map<String, dynamic>>> search(Map<String, dynamic> data) async {
     final User? user = auth.currentUser;
 
-    if (user == null) {
-      throw const AuthenticationException(
-        "User not connected",
-        "unauthenticated",
-      );
-    }
+    isUnauthenticated(auth);
 
     if (!data.containsKey("query")) {
       warn("data does not contain key 'query'");
@@ -58,7 +53,7 @@ class SearchRepository {
       final List<QueryDocumentSnapshot<Map<String, dynamic>>> groupsRelation =
           groupSnapshot.docs
               .where(
-                (groupData) => (groupData["users"] as List).contains(user.uid),
+                (groupData) => (groupData["users"] as List).contains(user!.uid),
               )
               .toList();
 
@@ -68,7 +63,7 @@ class SearchRepository {
 
       return profile;
     })))
-        .where((profile) => profile["uid"] != user.uid)
+        .where((profile) => profile["uid"] != user!.uid)
         .toList();
   }
 }
