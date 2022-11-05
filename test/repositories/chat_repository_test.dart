@@ -8,7 +8,206 @@ import "package:firebase_auth_mocks/firebase_auth_mocks.dart";
 import "package:flutter_test/flutter_test.dart";
 
 void main() {
-  group("load", () {});
+  group("load", () {
+    late FakeFirebaseFirestore firestore;
+    late MockFirebaseAuth auth;
+
+    setUp(() {
+      firestore = FakeFirebaseFirestore();
+      auth = MockFirebaseAuth(
+        signedIn: true,
+        mockUser: MockUser(
+          uid: "123456789",
+        ),
+      );
+    });
+
+    test("Doit retourner une errur quand le groupe id n'est pas renseigné",
+        () async {
+      // ARRANGE
+      final ChatRepository chatRepository = ChatRepository(
+        firestore,
+        auth,
+      );
+
+      // ACT
+      // ASSERT
+      expect(
+        () async => await chatRepository.load({}),
+        throwsA(
+          isA<ChatException>().having(
+            (p0) => p0.code,
+            "code",
+            "group_id_required",
+          ),
+        ),
+      );
+    });
+
+    test("Doit retourner une erreur si l'utilisateur n'est pas connecté",
+        () async {
+      // ARRANGE
+      auth = MockFirebaseAuth(
+        signedIn: false,
+      );
+
+      final ChatRepository chatRepository = ChatRepository(
+        firestore,
+        auth,
+      );
+
+      // ACT
+      // ASSERT
+      expect(
+          () async => await chatRepository.load({
+                "groupId": "123456",
+              }),
+          throwsA(
+            isA<AuthenticationException>().having(
+              (AuthenticationException e) => e.code,
+              "code",
+              "unauthenticated",
+            ),
+          ));
+    });
+
+    test("Doit retourner une erreur si le groupe n'existe pas", () async {
+      // ARRANGE
+      final ChatRepository chatRepository = ChatRepository(
+        firestore,
+        auth,
+      );
+
+      // ACT
+      // ASSERT
+      expect(
+          () async => await chatRepository.load({
+                "groupId": "123456",
+              }),
+          throwsA(
+            isA<ChatException>().having(
+              (ChatException e) => e.code,
+              "code",
+              "group_not_found",
+            ),
+          ));
+    });
+
+    test(
+        "Doit retourner une erreur si l'utilisateur ne fait pas partie du groupe",
+        () async {
+      // ARRANGE
+      final MockUser user = MockUser(
+        uid: "123456",
+      );
+
+      auth = MockFirebaseAuth(
+        signedIn: true,
+        mockUser: user,
+      );
+
+      await firestore.collection("groups").doc("123456").set({
+        "users": [
+          "234567",
+        ],
+      });
+
+      final ChatRepository chatRepository = ChatRepository(
+        firestore,
+        auth,
+      );
+
+      // ACT
+      // ASSERT
+      expect(
+          () async => await chatRepository.load({
+                "groupId": "123456",
+              }),
+          throwsA(
+            isA<ChatException>().having(
+              (ChatException e) => e.code,
+              "code",
+              "group_users_not_found",
+            ),
+          ));
+    });
+
+    test("Doit retourner une liste de messages", () async {
+      // ARRANGE
+      final MockUser user = MockUser(
+        uid: "123456",
+      );
+
+      auth = MockFirebaseAuth(
+        signedIn: true,
+        mockUser: user,
+      );
+
+      await firestore.collection("groups").doc("azerty").set({
+        "users": [
+          "123456",
+        ],
+      });
+
+      await firestore
+          .collection("groups")
+          .doc("azerty")
+          .collection("messages")
+          .doc("666")
+          .set({
+        "message": "Hello world",
+        "sender": "123456",
+        "createdAt": Timestamp.now(),
+        "updatedAt": Timestamp.now(),
+      });
+
+      await firestore
+          .collection("groups")
+          .doc("azerty")
+          .collection("messages")
+          .doc("777")
+          .set({
+        "message": "Hello world",
+        "sender": "999999",
+        "createdAt": Timestamp.now(),
+        "updatedAt": Timestamp.now(),
+      });
+
+      final ChatRepository chatRepository = ChatRepository(
+        firestore,
+        auth,
+      );
+
+      // ACT
+      await chatRepository.load({
+        "groupId": "azerty",
+      });
+
+      // ASSERT
+      expect(
+          chatRepository.messages,
+          emitsInOrder([
+            [
+              {
+                "uid": "777",
+                "message": "Hello world",
+                "sender": "999999",
+                "isMe": false,
+                "createdAt": isA<Timestamp>(),
+                "updatedAt": isA<Timestamp>(),
+              },
+              {
+                "uid": "666",
+                "message": "Hello world",
+                "sender": "123456",
+                "isMe": true,
+                "createdAt": isA<Timestamp>(),
+                "updatedAt": isA<Timestamp>(),
+              },
+            ]
+          ]));
+    });
+  });
 
   group("post", () {
     late FakeFirebaseFirestore firestore;

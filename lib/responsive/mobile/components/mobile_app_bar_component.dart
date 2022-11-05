@@ -57,6 +57,10 @@ class MobileAppBarComponent extends StatelessWidget
                   final Map<String, dynamic> group =
                       (state as OpenChatInitialState).group;
 
+                  Map<String, dynamic> user = group["users"].firstWhere(
+                    (Map<String, dynamic> user) => user["uid"] != true,
+                  );
+
                   return Stack(
                     alignment: Alignment.center,
                     children: [
@@ -88,8 +92,8 @@ class MobileAppBarComponent extends StatelessWidget
                       Positioned.fill(
                         child: ChatHeadingBarComponent(
                           profile: {
-                            "displayName": group["displayName"],
-                            "photoUrl": group["photoUrl"],
+                            "displayName": user["displayName"],
+                            "photoUrl": user["photoUrl"],
                           },
                         ),
                       ),

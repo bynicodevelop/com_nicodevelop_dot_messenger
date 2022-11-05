@@ -54,7 +54,8 @@ class TabletHomeScreen extends StatelessWidget {
                 flex: 4,
                 child: BlocBuilder<OpenGroupBloc, OpenGroupState>(
                   builder: (context, state) {
-                    final group = (state as OpenChatInitialState).group;
+                    final Map<String, dynamic> group =
+                        (state as OpenChatInitialState).group;
 
                     if (group.isEmpty) {
                       return const Center(
@@ -85,25 +86,11 @@ class TabletHomeScreen extends StatelessWidget {
                         },
                         child: MessageEditorComponent(
                           onSend: (message) {
-                            info("Send message", data: {
-                              "message": message,
-                              "recipient": group["users"].firstWhere(
-                                (user) => user["current"] != true,
-                              ),
-                              "groupId": group["uid"],
-                            });
-
-                            context.read<PostMessageBloc>().add(
-                                  OnPostMessageEvent(
-                                    data: {
-                                      "recipient": group["users"].firstWhere(
-                                        (user) => user["current"] != true,
-                                      ),
-                                      "groupId": group["uid"],
-                                      "message": message,
-                                    },
-                                  ),
-                                );
+                            sendMessage(
+                              context,
+                              group,
+                              message,
+                            );
                           },
                         ),
                       ),

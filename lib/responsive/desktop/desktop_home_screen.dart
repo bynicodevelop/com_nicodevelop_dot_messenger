@@ -5,9 +5,11 @@ import "package:com_nicodevelop_dotmessenger/components/left_column_constrained_
 import "package:com_nicodevelop_dotmessenger/components/list_group_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/message_editor_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/validate_account_component.dart";
+import "package:com_nicodevelop_dotmessenger/services/chat/post_message/post_message_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
+import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 
@@ -45,8 +47,21 @@ class DesktopHomeScreen extends StatelessWidget {
                 flex: 4,
                 child: ChatScaffoldComponent(
                   messages: const ChatMessageComponent(),
-                  editor: MessageEditorComponent(
-                    onSend: (message) {},
+                  editor: BlocBuilder<OpenGroupBloc, OpenGroupState>(
+                    builder: (context, state) {
+                      final Map<String, dynamic> group =
+                          (state as OpenChatInitialState).group;
+
+                      return MessageEditorComponent(
+                        onSend: (message) {
+                          sendMessage(
+                            context,
+                            group,
+                            message,
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
               ),
@@ -63,10 +78,15 @@ class DesktopHomeScreen extends StatelessWidget {
                           return const SizedBox.shrink();
                         }
 
+                        final Map<String, dynamic> user =
+                            group["users"].firstWhere(
+                          (user) => user["uid"] != true,
+                        );
+
                         return ChatHeadingBarComponent(
                           profile: {
-                            "displayName": group["displayName"],
-                            "photoUrl": group["photoUrl"],
+                            "displayName": user["displayName"],
+                            "photoUrl": user["photoUrl"],
                           },
                         );
                       },

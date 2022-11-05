@@ -1,7 +1,6 @@
 import "dart:async";
 
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:com_nicodevelop_dotmessenger/config/data_mock.dart";
 import "package:com_nicodevelop_dotmessenger/exceptions/authentication_exception.dart";
 import "package:com_nicodevelop_dotmessenger/exceptions/chat_exception.dart";
 import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
@@ -23,20 +22,65 @@ class ChatRepository {
   Stream<List<Map<String, dynamic>>> get messages => _messagesController.stream;
 
   Future<void> load(Map<String, dynamic> data) async {
+    final User? user = auth.currentUser;
+
+    if (user == null) {
+      throw const AuthenticationException(
+        "User not connected",
+        "unauthenticated",
+      );
+    }
+
     if (!data.containsKey("groupId")) {
-      throw ArgumentError("groupId is required");
+      throw const ChatException(
+        "groupId is required",
+        "group_id_required",
+      );
     }
 
-    info(
-      "Loading messages for group",
-      data: data,
-    );
+    final String groupId = data["groupId"];
 
-    for (var group in groupsList) {
-      if (group["uid"] == data["groupId"]) {
-        _messagesController.add(group["messages"]);
+    DocumentSnapshot<Map<String, dynamic>> groupDocumentSnapshot =
+        await firestore.collection("groups").doc(groupId).get();
+
+    if (!groupDocumentSnapshot.exists) {
+      throw const ChatException(
+        "Group not found",
+        "group_not_found",
+      );
+    }
+
+    final Map<String, dynamic> group = groupDocumentSnapshot.data()!;
+
+    if (!group["users"].contains(user.uid)) {
+      throw const ChatException(
+        "Group users not found",
+        "group_users_not_found",
+      );
+    }
+
+    groupDocumentSnapshot.reference
+        .collection("messages")
+        .orderBy(
+          "createdAt",
+          descending: true,
+        )
+        .snapshots()
+        .listen((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+      final List<Map<String, dynamic>> messages = [];
+
+      for (var documentSnapshot in querySnapshot.docs) {
+        final Map<String, dynamic> message = documentSnapshot.data();
+
+        messages.add({
+          ...message,
+          "uid": documentSnapshot.id,
+          "isMe": message["sender"] == user.uid,
+        });
       }
-    }
+
+      _messagesController.add(messages);
+    });
   }
 
   Future<Map<String, dynamic>> post(Map<String, dynamic> data) async {
