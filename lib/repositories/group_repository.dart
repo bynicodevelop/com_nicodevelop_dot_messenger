@@ -32,7 +32,14 @@ class GroupRepository {
     final Stream<QuerySnapshot<Map<String, dynamic>>> groupsQuerySnapshot =
         firestore
             .collection("groups")
-            .where("users", arrayContains: user.uid)
+            .orderBy(
+              "lastMessageTime",
+              descending: true,
+            )
+            .where(
+              "users",
+              arrayContains: user.uid,
+            )
             .snapshots();
 
     groupsQuerySnapshot

@@ -2,6 +2,8 @@ import "package:com_nicodevelop_dotmessenger/widgets/avatar_widget.dart";
 import "package:timeago/timeago.dart" as timeago;
 import "package:flutter/material.dart";
 
+import "package:com_nicodevelop_dotmessenger/utils/string_casting_extension.dart";
+
 class ItemGroupWidget extends StatelessWidget {
   final String avatarUrl;
   final String displayName;
@@ -30,7 +32,7 @@ class ItemGroupWidget extends StatelessWidget {
         username: displayName,
       ),
       title: Text(
-        displayName,
+        displayName.toTitleCase(),
         style: Theme.of(context).textTheme.bodyText1!.copyWith(
               fontWeight: isReaded ? FontWeight.normal : FontWeight.bold,
             ),

@@ -34,7 +34,7 @@ class ChatHeadingBarComponent extends StatelessWidget {
             height: 10,
           ),
           Text(
-            profile["displayName"],
+            profile["displayName"].toTitleCase(),
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w300,
@@ -60,7 +60,7 @@ class ChatHeadingBarComponent extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  profile["displayName"],
+                  profile["displayName"].toTitleCase(),
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w300,
