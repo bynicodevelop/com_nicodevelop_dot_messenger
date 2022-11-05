@@ -10,7 +10,12 @@ import "package:flutter/material.dart";
 import "package:validators/sanitizers.dart";
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  final Function()? onSelected;
+
+  const SearchScreen({
+    Key? key,
+    this.onSelected,
+  }) : super(key: key);
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -127,7 +132,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     itemBuilder: (context, index) {
                       return Card(
                         child: ListTile(
-                          onTap: () {
+                          onTap: () async {
                             Map<String, dynamic> openDiscussion = {
                               "users": [
                                 {
@@ -153,6 +158,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             openGroup(context, openDiscussion);
 
                             Navigator.pop(context);
+
+                            widget.onSelected?.call();
                           },
                           title: Text(state.result[index]["displayName"]),
                           leading: AvatarWidget(

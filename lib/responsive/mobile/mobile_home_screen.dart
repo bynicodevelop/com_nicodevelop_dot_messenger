@@ -2,6 +2,7 @@ import "package:com_nicodevelop_dotmessenger/components/list_group_component.dar
 import "package:com_nicodevelop_dotmessenger/components/validate_account_component.dart";
 import "package:com_nicodevelop_dotmessenger/responsive/mobile/components/mobile_app_bar_component.dart";
 import "package:com_nicodevelop_dotmessenger/responsive/mobile/screens/mobile_chat_screen.dart";
+import "package:com_nicodevelop_dotmessenger/screens/search_screen.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
@@ -74,6 +75,26 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
           ],
         ),
       ),
+      floatingActionButton: _page == 0
+          ? FloatingActionButton(
+              onPressed: () async => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  fullscreenDialog: true,
+                  builder: (context) => SearchScreen(
+                    onSelected: () => _pageController.animateToPage(
+                      1,
+                      duration: const Duration(
+                        milliseconds: 300,
+                      ),
+                      curve: Curves.ease,
+                    ),
+                  ),
+                ),
+              ),
+              child: const Icon(Icons.edit),
+            )
+          : null,
     );
   }
 }
