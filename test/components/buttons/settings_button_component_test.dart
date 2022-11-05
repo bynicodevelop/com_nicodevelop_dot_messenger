@@ -1,4 +1,4 @@
-import "package:com_nicodevelop_dotmessenger/components/buttons/new_discussion_button_component.dart";
+import "package:com_nicodevelop_dotmessenger/components/buttons/settings_button_component.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 
@@ -14,7 +14,7 @@ void main() {
           body: SizedBox(
             width: 300,
             height: 300,
-            child: NewDiscussionButtonComponent(
+            child: SettingsButtonComponent(
               onTap: () => isClicked = true,
             ),
           ),
@@ -39,7 +39,7 @@ void main() {
           body: SizedBox(
             width: 300,
             height: 300,
-            child: NewDiscussionButtonComponent(
+            child: SettingsButtonComponent(
               onTap: () {},
             ),
           ),
@@ -48,7 +48,7 @@ void main() {
     );
 
     // ACT
-    final iconFinder = find.byIcon(Icons.edit_outlined);
+    final iconFinder = find.byIcon(Icons.settings);
 
     // ASSERT
     expect(iconFinder, findsOneWidget);
