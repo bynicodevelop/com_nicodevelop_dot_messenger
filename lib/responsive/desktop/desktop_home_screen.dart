@@ -35,8 +35,15 @@ class DesktopHomeScreen extends StatelessWidget {
                     }
 
                     return ListGroupComponent(
-                      onInit: () => openGroup(context, groups[0]),
+                      onInit: () => openGroup(
+                        context,
+                        groups[0],
+                      ),
                       groups: groups,
+                      onTap: (group) => openGroup(
+                        context,
+                        group,
+                      ),
                     );
                   },
                 ),
