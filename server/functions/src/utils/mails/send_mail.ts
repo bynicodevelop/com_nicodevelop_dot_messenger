@@ -3,6 +3,7 @@ import {readFileSync} from "fs";
 import {compile} from "handlebars";
 import {info} from "firebase-functions/logger";
 import {resolve} from "path";
+// import * as SparkPost from "sparkpost";
 
 import {
   appName,

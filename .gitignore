@@ -55,6 +55,7 @@ lib/firebase_options.dart
 
 server/.firebaserc
 server/functions/.env
+server/functions/.env.production
 server/functions/node_modules
 
 server/functions/assets/mails/build_local
