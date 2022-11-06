@@ -63,3 +63,4 @@ server/functions/assets/mails/templates
 server/functions/assets/mails/node_modules
 
 coverage/
+server/build/web

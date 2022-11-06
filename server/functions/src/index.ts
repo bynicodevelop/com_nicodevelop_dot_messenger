@@ -56,6 +56,11 @@ export const onCheckCodesUpdated = functions
       const {uid} = context.params;
       const {validated} = change.after.data();
 
+      info("Check code updated", {
+        uid,
+        validated,
+      });
+
       if (validated) {
         await admin.auth().updateUser(uid, {
           emailVerified: true,
@@ -73,6 +78,12 @@ export const onTransactionalMail = functions
     .onCreate(async (snap, context): Promise<void> => {
       const {transactionalMailId} = context.params;
       const {userId: uid, sendAt} = snap.data();
+
+      info("Transactional mail created", {
+        transactionalMailId,
+        uid,
+        sendAt,
+      });
 
       const {email} = await admin.auth().getUser(uid);
 
