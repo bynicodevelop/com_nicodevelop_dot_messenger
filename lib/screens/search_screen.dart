@@ -90,9 +90,10 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Padding(
         padding: EdgeInsets.only(
-          top: 16.0,
+          top: 20.0,
           left: _responsiveWidth(context),
           right: _responsiveWidth(context),
         ),
