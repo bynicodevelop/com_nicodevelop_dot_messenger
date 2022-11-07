@@ -22,9 +22,6 @@ class BlurryHeadingWidget extends StatelessWidget {
         ),
         child: Container(
           height: height,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-          ),
           color: Colors.transparent,
           child: child,
         ),

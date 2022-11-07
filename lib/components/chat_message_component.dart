@@ -1,8 +1,11 @@
+import "dart:io";
+
 import "package:com_nicodevelop_dotmessenger/components/bubble_event_wrapper_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
 import "package:com_nicodevelop_dotmessenger/services/chat/load_messages/load_messages_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/widgets/bubble_widget.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 
@@ -48,7 +51,11 @@ class _ChatMessageComponentState extends State<ChatMessageComponent> {
 
             return ListView.builder(
               padding: EdgeInsets.only(
-                top: 90,
+                top: kIsWeb
+                    ? 90
+                    : Platform.isIOS
+                        ? 150
+                        : 110,
                 left:
                     ResponsiveComponent.device != DeviceEnum.mobile ? 50 : 10.0,
                 right:

@@ -1,6 +1,9 @@
+import "dart:io";
+
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
 import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
 import "package:com_nicodevelop_dotmessenger/widgets/item_group_widget.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 
 class ListGroupComponent extends StatefulWidget {
@@ -40,8 +43,12 @@ class _ListGroupComponentState extends State<ListGroupComponent> {
 
     return ListView.builder(
       padding: ResponsiveComponent.device == DeviceEnum.mobile
-          ? const EdgeInsets.only(
-              top: 90,
+          ? EdgeInsets.only(
+              top: kIsWeb
+                  ? 90
+                  : Platform.isIOS
+                      ? 150
+                      : 110,
             )
           : null,
       itemCount: widget.groups.length,

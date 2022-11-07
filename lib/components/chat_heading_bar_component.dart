@@ -47,31 +47,36 @@ class ChatHeadingBarComponent extends StatelessWidget {
     }
 
     if (ResponsiveComponent.device == DeviceEnum.tablet) {
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          AvatarWidget(
-            avatarUrl: profile["photoUrl"],
-            username: profile["displayName"],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 20.0,
-              horizontal: 10.0,
+      return Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            AvatarWidget(
+              avatarUrl: profile["photoUrl"],
+              username: profile["displayName"],
             ),
-            child: Column(
-              children: [
-                Text(
-                  (profile["displayName"] as String).toTitleCase(),
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w300,
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 20.0,
+                horizontal: 10.0,
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    (profile["displayName"] as String).toTitleCase(),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       );
     }
 
