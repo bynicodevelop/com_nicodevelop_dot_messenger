@@ -132,6 +132,8 @@ class ChatRepository {
       "sender": user!.uid,
     });
 
-    return {};
+    return {
+      "groupId": data["groupId"],
+    };
   }
 }

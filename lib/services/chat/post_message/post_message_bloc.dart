@@ -18,12 +18,16 @@ class PostMessageBloc extends Bloc<PostMessageEvent, PostMessageState> {
       emit(PostMessageLoadingState());
 
       try {
-        final Map<String, dynamic> postResult = await chatRepository.post(
-          event.data,
-        );
+        final Map<String, dynamic> postResult = await chatRepository.post({
+          "groupId": event.data["groupId"],
+          "message": event.data["message"],
+          "recipient": event.data["recipient"],
+        });
 
         if (postResult["groupId"] != event.data["groupId"]) {
-          emit(NewGroupCreatedState());
+          emit(NewGroupCreatedState(
+            groupId: postResult["groupId"],
+          ));
         } else {
           emit(PostMessageSuccessState());
         }

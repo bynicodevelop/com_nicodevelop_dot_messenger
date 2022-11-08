@@ -1,6 +1,7 @@
 import "package:com_nicodevelop_dotmessenger/components/chat_message_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/chat_scaffold_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/message_editor_component.dart";
+import "package:com_nicodevelop_dotmessenger/services/chat/post_message/post_message_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
 import "package:flutter/material.dart";
@@ -19,14 +20,24 @@ class MobileChatScreen extends StatelessWidget {
             final Map<String, dynamic> group =
                 (state as OpenChatInitialState).group;
 
-            return MessageEditorComponent(
-              onSend: (message) {
-                sendMessage(
-                  context,
-                  group,
-                  message,
-                );
+            return BlocListener<PostMessageBloc, PostMessageState>(
+              listener: (context, state) {
+                if (state is NewGroupCreatedState) {
+                  openGroup(context, {
+                    ...group,
+                    "uid": state.groupId,
+                  });
+                }
               },
+              child: MessageEditorComponent(
+                onSend: (message) {
+                  sendMessage(
+                    context,
+                    group,
+                    message,
+                  );
+                },
+              ),
             );
           },
         ),

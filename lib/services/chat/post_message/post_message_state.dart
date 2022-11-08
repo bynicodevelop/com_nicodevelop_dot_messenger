@@ -13,7 +13,18 @@ class PostMessageLoadingState extends PostMessageState {}
 
 class PostMessageSuccessState extends PostMessageState {}
 
-class NewGroupCreatedState extends PostMessageState {}
+class NewGroupCreatedState extends PostMessageState {
+  final String groupId;
+
+  const NewGroupCreatedState({
+    required this.groupId,
+  });
+
+  @override
+  List<Object> get props => [
+        groupId,
+      ];
+}
 
 class PostMessageFailureState extends PostMessageState {
   final String code;
