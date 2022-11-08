@@ -32,3 +32,14 @@ jobs:
 
       - name: Build functions
         run: npm --prefix server/functions run build
+
+      - name: Create .env file
+        id: env
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: ".env"
+          encodedString: ${{ secrets.ENV }}
+
+      - name: Move .env file to server
+        run: |
+          mv ${{ steps.env.outputs.filePath }} server/functions/.env
