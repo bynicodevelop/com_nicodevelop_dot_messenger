@@ -43,3 +43,33 @@ jobs:
       - name: Move .env file to server
         run: |
           mv ${{ steps.env.outputs.filePath }} server/functions/.env
+
+      - name: Create .firebaserc file
+        id: firebaserc
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: ".firebaserc"
+          encodedString: ${{ secrets.FIREBASERC }}
+
+      - name: Move .env firebaserc to server
+        run: |
+          mv ${{ steps.firebaserc.outputs.filePath }} server/.firebaserc
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.3.7'
+          channel: 'stable'
+
+      - run: flutter --version
+
+      - name: Flutter import dependencies
+        run: flutter pub get
+
+      - name: Flutter build
+        run: flutter build web
+
+      - name: Move build to server
+        run: |
+          mv build/web server/build/web
+
+      
