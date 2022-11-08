@@ -48,15 +48,15 @@ class _FakeFirebaseFirestore_1 extends _i1.SmartFake
 /// See the documentation for Mockito's code generation for more information.
 class MockProfileRepository extends _i1.Mock implements _i4.ProfileRepository {
   @override
-  _i2.FirebaseAuth get firebaseAuth => (super.noSuchMethod(
-        Invocation.getter(#firebaseAuth),
+  _i2.FirebaseAuth get auth => (super.noSuchMethod(
+        Invocation.getter(#auth),
         returnValue: _FakeFirebaseAuth_0(
           this,
-          Invocation.getter(#firebaseAuth),
+          Invocation.getter(#auth),
         ),
         returnValueForMissingStub: _FakeFirebaseAuth_0(
           this,
-          Invocation.getter(#firebaseAuth),
+          Invocation.getter(#auth),
         ),
       ) as _i2.FirebaseAuth);
   @override

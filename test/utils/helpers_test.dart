@@ -18,6 +18,17 @@ void main() {
       // ARRANGE
       final ChatRepository chatRepository = MockChatRepository();
 
+      when(chatRepository.post({
+        "message": "message",
+        "recipient": {
+          "uid": "uid2",
+          "currentUser": false,
+        },
+        "groupId": "groupUid",
+      })).thenAnswer((_) async => {
+            "groupId": "groupUid",
+          });
+
       await tester.pumpWidget(
         MaterialApp(
           home: BlocProvider<PostMessageBloc>(
@@ -63,7 +74,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // ASSERT
-      verify(await chatRepository.post({
+      verify(chatRepository.post({
         "message": "message",
         "recipient": {
           "uid": "uid2",

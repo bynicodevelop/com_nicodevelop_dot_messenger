@@ -19,12 +19,9 @@ void main() {
       when(chatRepository.post({
         "groupId": "1",
         "message": "Hello world",
+        "recipient": {},
       })).thenAnswer((_) async => {
-            "messageId": "1",
             "groupId": "1",
-            "message": "Hello world",
-            "createdAt": "2021-01-01T00:00:00.000Z",
-            "updatedAt": "2021-01-01T00:00:00.000Z",
           });
 
       return PostMessageBloc(chatRepository);
@@ -33,6 +30,7 @@ void main() {
       bloc.add(const OnPostMessageEvent(data: {
         "groupId": "1",
         "message": "Hello world",
+        "recipient": {},
       }));
     },
     expect: () => [
@@ -49,12 +47,10 @@ void main() {
       // ignore: discarded_futures
       when(chatRepository.post({
         "message": "New Hello world",
+        "recipient": {},
+        "groupId": "",
       })).thenAnswer((_) async => {
-            "messageId": "1",
             "groupId": "1",
-            "message": "New Hello world",
-            "createdAt": "2021-01-01T00:00:00.000Z",
-            "updatedAt": "2021-01-01T00:00:00.000Z",
           });
 
       return PostMessageBloc(chatRepository);
@@ -62,11 +58,15 @@ void main() {
     act: (bloc) {
       bloc.add(const OnPostMessageEvent(data: {
         "message": "New Hello world",
+        "groupId": "",
+        "recipient": {},
       }));
     },
     expect: () => [
       PostMessageLoadingState(),
-      NewGroupCreatedState(),
+      const NewGroupCreatedState(
+        groupId: "1",
+      ),
     ],
   );
 
@@ -79,6 +79,7 @@ void main() {
       when(chatRepository.post({
         "groupId": "1",
         "message": "",
+        "recipient": {},
       })).thenThrow(const ChatException(
         "Message is required",
         "message_required",
@@ -90,6 +91,7 @@ void main() {
       bloc.add(const OnPostMessageEvent(data: {
         "groupId": "1",
         "message": "",
+        "recipient": {},
       }));
     },
     expect: () => [
@@ -109,6 +111,7 @@ void main() {
       when(chatRepository.post({
         "groupId": "1",
         "message": "Hello world",
+        "recipient": {},
       })).thenThrow(const AuthenticationException(
         "User is not connected",
         "unauthenticated",
@@ -120,6 +123,7 @@ void main() {
       bloc.add(const OnPostMessageEvent(data: {
         "groupId": "1",
         "message": "Hello world",
+        "recipient": {},
       }));
     },
     expect: () => [
