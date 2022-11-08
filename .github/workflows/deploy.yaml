@@ -55,6 +55,17 @@ jobs:
         run: |
           mv ${{ steps.firebaserc.outputs.filePath }} server/.firebaserc
 
+      - name: Create firebase_options.dart file
+        id: firebase_options
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: "firebase_options.dart"
+          encodedString: ${{ secrets.FIREBASE_OPTIONS }}
+
+      - name: Move firebase_options.dart to lib folder
+        run: |
+          mv ${{ steps.firebase_options.outputs.filePath }} lib
+
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.3.7'
