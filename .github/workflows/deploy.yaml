@@ -5,4 +5,4 @@ on:
 
 jobs:
   build:
-    uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/tests.yaml
+    uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/tests.yaml@develop
