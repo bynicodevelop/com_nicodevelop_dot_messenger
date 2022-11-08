@@ -84,17 +84,13 @@ jobs:
           mv build/web server/build/web
 
       - name: Deploy serveur
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only functions
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          cd server
+          firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
 
       - name: Deploy client
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only hosting
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          cd server
+          firebase deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }}
 
       
