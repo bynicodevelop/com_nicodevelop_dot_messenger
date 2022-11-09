@@ -68,6 +68,10 @@ export const onCheckCodesUpdated = functions
 
         await admin.firestore().collection("check_codes").doc(uid).delete();
 
+        await admin.firestore().collection("users").doc(uid).update({
+          emailVerified: true,
+        });
+
         info("User validated", {uid});
       }
     });
