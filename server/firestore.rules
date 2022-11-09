@@ -12,5 +12,17 @@ service cloud.firestore {
     match /transactional_mails/{document=**} {
       allow create: if request.auth != null;
     }
+
+    match /users/{userId} {
+      allow list, get: if request.auth != null;
+    }
+
+    match /groups/{groupId} {
+      allow create, list, get: if request.auth != null;
+
+      match /messages/{messageId} {
+        allow create, get, list: if request.auth != null;
+      }
+    }
   }
 }

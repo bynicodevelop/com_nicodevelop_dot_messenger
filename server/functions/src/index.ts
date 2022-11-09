@@ -17,7 +17,7 @@ admin.initializeApp();
 export const onUserCreated = functions.auth.user().onCreate(
     async ({uid, email}): Promise<void> => {
       if (email) {
-        const username = email?.split("@")[0];
+        const displayName = email?.split("@")[0];
 
         const code = await generateCodeVerification(
             uid,
@@ -26,10 +26,14 @@ export const onUserCreated = functions.auth.user().onCreate(
         await sendCodeVerification(email, code);
 
         await admin.auth().updateUser(uid, {
-          displayName: username,
+          displayName,
         });
 
-        info("User created", {uid, email, username});
+        await admin.firestore().collection("users").doc(uid).set({
+          displayName: displayName.toLowerCase(),
+        });
+
+        info("User created", {uid, email, displayName});
       }
     }
 );
@@ -48,9 +52,14 @@ export const onUserDeleted = functions
 export const onCheckCodesUpdated = functions
     .firestore
     .document("check_codes/{uid}")
-    .onUpdate(async (change, context) => {
+    .onUpdate(async (change, context): Promise<void> => {
       const {uid} = context.params;
       const {validated} = change.after.data();
+
+      info("Check code updated", {
+        uid,
+        validated,
+      });
 
       if (validated) {
         await admin.auth().updateUser(uid, {
@@ -66,9 +75,15 @@ export const onCheckCodesUpdated = functions
 export const onTransactionalMail = functions
     .firestore
     .document("transactional_mails/{transactionalMailId}")
-    .onCreate(async (snap, context) => {
+    .onCreate(async (snap, context): Promise<void> => {
       const {transactionalMailId} = context.params;
       const {userId: uid, sendAt} = snap.data();
+
+      info("Transactional mail created", {
+        transactionalMailId,
+        uid,
+        sendAt,
+      });
 
       const {email} = await admin.auth().getUser(uid);
 
@@ -92,4 +107,51 @@ export const onTransactionalMail = functions
               sentAt: admin.firestore.FieldValue.serverTimestamp(),
             });
       }
+    });
+
+export const onGroupCreated = functions
+    .firestore
+    .document("groups/{groupId}")
+    .onCreate(async (snap, context): Promise<void> => {
+      const {groupId} = context.params;
+
+      const createdAt = admin.firestore.FieldValue.serverTimestamp();
+
+      await admin
+          .firestore()
+          .collection("groups")
+          .doc(groupId)
+          .update({
+            createdAt,
+            updatedAt: createdAt,
+          });
+    });
+
+export const onMessageCreated = functions
+    .firestore
+    .document("groups/{groupId}/messages/{messageId}")
+    .onCreate(async (snap, context): Promise<void> => {
+      const {groupId, messageId} = context.params;
+      const {message} = snap.data();
+
+      const createdAt = admin.firestore.FieldValue.serverTimestamp();
+
+      await admin
+          .firestore()
+          .collection("groups")
+          .doc(groupId)
+          .collection("messages")
+          .doc(messageId).update({
+            createdAt,
+            updatedAt: createdAt,
+          });
+
+      await admin
+          .firestore()
+          .collection("groups")
+          .doc(groupId)
+          .update({
+            lastMessage: message,
+            lastMessageTime: createdAt,
+          });
     });

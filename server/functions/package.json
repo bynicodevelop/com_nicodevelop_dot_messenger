@@ -4,10 +4,10 @@
     "lint": "eslint --ext .js,.ts .",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "serve": "npm run build && firebase emulators:start",
+    "serve": "cp .env.sample .env && npm run build && firebase emulators:start",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
+    "deploy": "cp .env.production .env && firebase deploy && rm .env",
     "logs": "firebase functions:log"
   },
   "engines": {
@@ -17,7 +17,7 @@
   "dependencies": {
     "@types/nodemailer": "^6.4.6",
     "firebase-admin": "^10.0.2",
-    "firebase-functions": "^4.0.1",
+    "firebase-functions": "^4.0.2",
     "handlebars": "^4.7.7",
     "nodemailer": "^6.8.0"
   },

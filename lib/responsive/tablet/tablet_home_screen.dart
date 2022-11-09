@@ -5,9 +5,12 @@ import "package:com_nicodevelop_dotmessenger/components/list_group_component.dar
 import "package:com_nicodevelop_dotmessenger/components/left_column_constrained_box_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/message_editor_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/validate_account_component.dart";
+import "package:com_nicodevelop_dotmessenger/services/chat/post_message/post_message_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
+import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
 import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
+import "package:com_nicodevelop_dotmessenger/utils/notice.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter/material.dart";
 
@@ -38,22 +41,10 @@ class TabletHomeScreen extends StatelessWidget {
                       onInit: () {
                         info("Select first group from the list");
 
-                        context.read<OpenGroupBloc>().add(OnOpenGroupEvent(
-                              group: {
-                                "uid": groups[0]["uid"],
-                                "displayName": groups[0]["displayName"],
-                                "photoUrl": groups[0]["avatarUrl"],
-                              },
-                            ));
+                        openGroup(context, groups[0]);
                       },
                       onTap: (Map<String, dynamic> group) {
-                        context.read<OpenGroupBloc>().add(OnOpenGroupEvent(
-                              group: {
-                                "uid": group["uid"],
-                                "displayName": group["displayName"],
-                                "photoUrl": group["avatarUrl"],
-                              },
-                            ));
+                        openGroup(context, group);
                       },
                     );
                   },
@@ -63,24 +54,45 @@ class TabletHomeScreen extends StatelessWidget {
                 flex: 4,
                 child: BlocBuilder<OpenGroupBloc, OpenGroupState>(
                   builder: (context, state) {
-                    final group = (state as OpenChatInitialState).group;
+                    final Map<String, dynamic> group =
+                        (state as OpenChatInitialState).group;
 
-                    if (group["uid"] == null) {
+                    if (group.isEmpty) {
                       return const Center(
                         child: Text("Selectionnez une discussion"),
                       );
                     }
 
+                    final Map<String, dynamic> user = excludeCurrentUser(
+                      group["users"],
+                    );
+
                     return ChatScaffoldComponent(
                       heading: ChatHeadingBarComponent(
                         profile: {
-                          "displayName": group["displayName"],
-                          "photoUrl": group["photoUrl"],
+                          "displayName": user["displayName"],
+                          "photoUrl": user["photoUrl"],
                         },
                       ),
                       messages: const ChatMessageComponent(),
-                      editor: MessageEditorComponent(
-                        onSend: (message) {},
+                      editor: BlocListener<PostMessageBloc, PostMessageState>(
+                        listener: (context, state) {
+                          if (state is PostMessageFailureState) {
+                            return notice(
+                              context,
+                              state.code,
+                            );
+                          }
+                        },
+                        child: MessageEditorComponent(
+                          onSend: (message) {
+                            sendMessage(
+                              context,
+                              group,
+                              message,
+                            );
+                          },
+                        ),
                       ),
                     );
                   },

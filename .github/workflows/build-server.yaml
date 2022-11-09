@@ -1,0 +1,67 @@
+name: Build Server
+
+on:
+  workflow_call:
+    secrets:
+      env:
+        required: true
+      firebaserc:
+        required: true
+      firebase_token:
+        required: true
+  
+jobs:
+  build-server:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: $/.npm
+          key: $-node-$
+          restore-keys: $-node-
+
+      - name: Install firebase-tools
+        run: npm install -g firebase-tools
+
+      - name: Install dependencies
+        run: npm --prefix server/functions ci
+
+      - name: Build functions
+        run: npm --prefix server/functions run build
+
+      - name: Create .env file
+        id: env
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: ".env"
+          encodedString: ${{ secrets.env }}
+
+      - name: Move .env file to server
+        run: |
+          mv ${{ steps.env.outputs.filePath }} server/functions/.env
+
+      - name: Create .firebaserc file
+        id: firebaserc
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: ".firebaserc"
+          encodedString: ${{ secrets.firebaserc }}
+
+      - name: Move .env firebaserc to server
+        run: |
+          mv ${{ steps.firebaserc.outputs.filePath }} server/.firebaserc
+
+      - name: Deploy server
+        run: |
+          cd server
+          firebase deploy --only functions --token ${{ secrets.firebase_token }}

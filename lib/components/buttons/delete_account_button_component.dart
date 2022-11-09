@@ -1,20 +1,22 @@
-import "package:com_nicodevelop_dotmessenger/screens/login_screen.dart";
 import "package:com_nicodevelop_dotmessenger/services/auth/delete_account/delete_account_bloc.dart";
-import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
+import "package:flutter/material.dart";
 
 class DeleteAccountButtonComponent extends StatelessWidget {
-  const DeleteAccountButtonComponent({super.key});
+  final Function()? onDeleted;
+
+  const DeleteAccountButtonComponent({
+    super.key,
+    this.onDeleted,
+  });
 
   Widget _deleteAccountConfirm(BuildContext context) =>
       BlocListener<DeleteAccountBloc, DeleteAccountState>(
-        listener: (context, state) async => Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LoginScreen(),
-          ),
-          (route) => false,
-        ),
+        listener: (context, state) async {
+          Navigator.pop(context);
+
+          onDeleted?.call();
+        },
         child: AlertDialog(
           title: const Text("Delete Account"),
           content: const Text("Are you sure you want to delete your account?"),

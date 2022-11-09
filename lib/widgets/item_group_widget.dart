@@ -1,11 +1,14 @@
 import "package:com_nicodevelop_dotmessenger/widgets/avatar_widget.dart";
+import "package:timeago/timeago.dart" as timeago;
 import "package:flutter/material.dart";
+
+import "package:com_nicodevelop_dotmessenger/utils/string_casting_extension.dart";
 
 class ItemGroupWidget extends StatelessWidget {
   final String avatarUrl;
   final String displayName;
   final String lastMessage;
-  final String lastMessageTime;
+  final DateTime lastMessageTime;
   final bool isReaded;
 
   final Function()? onTap;
@@ -26,9 +29,10 @@ class ItemGroupWidget extends StatelessWidget {
       onTap: onTap,
       leading: AvatarWidget(
         avatarUrl: avatarUrl,
+        username: displayName,
       ),
       title: Text(
-        displayName,
+        displayName.toTitleCase(),
         style: Theme.of(context).textTheme.bodyText1!.copyWith(
               fontWeight: isReaded ? FontWeight.normal : FontWeight.bold,
             ),
@@ -40,7 +44,7 @@ class ItemGroupWidget extends StatelessWidget {
             ),
       ),
       trailing: Text(
-        lastMessageTime,
+        timeago.format(lastMessageTime),
         style: Theme.of(context).textTheme.bodyText1!.copyWith(
               fontWeight: isReaded ? FontWeight.normal : FontWeight.bold,
             ),

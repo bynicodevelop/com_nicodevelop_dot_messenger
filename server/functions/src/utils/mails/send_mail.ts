@@ -3,6 +3,7 @@ import {readFileSync} from "fs";
 import {compile} from "handlebars";
 import {info} from "firebase-functions/logger";
 import {resolve} from "path";
+// import * as SparkPost from "sparkpost";
 
 import {
   appName,
@@ -21,7 +22,10 @@ export const sendEmail = async (
     email: string,
     template: string
 ): Promise<void> => {
-  info("Send email", {subject, email});
+  info("Send email", {
+    subject,
+    email,
+  });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const configOptions: any = {
@@ -56,7 +60,10 @@ const convertTemplate = (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: any
 ): string => {
-  info("Create template", {templateName, data});
+  info("Create template", {
+    templateName,
+    data,
+  });
 
   const template = readFileSync(
       resolve(
@@ -78,7 +85,10 @@ export const sendCodeVerification = async (
     email: string,
     code: string,
 ): Promise<void> => {
-  info("Send code verification");
+  info("Send code verification", {
+    email,
+    code,
+  });
 
   const emailTemplate = convertTemplate(
       "verification_email",
@@ -95,7 +105,9 @@ export const sendCodeVerification = async (
 export const sendConfirmationDeleteAccount = async (
     email: string,
 ): Promise<void> => {
-  info("Send confirmation delete account");
+  info("Send confirmation delete account", {
+    email,
+  });
 
   const emailTemplate = convertTemplate(
       "confirmation_delete_account",

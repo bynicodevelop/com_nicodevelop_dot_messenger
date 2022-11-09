@@ -125,4 +125,34 @@ void main() {
       expect(find.byType(Text), findsNothing);
     });
   });
+
+  testWidgets("Doit afficher les initiales si l'image est empty",
+      (WidgetTester tester) async {
+    mockNetworkImagesFor(() async {
+      // ARRANGE
+      const String avatarUrl = "";
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: AvatarWidget(
+              username: "Nico Develop",
+              avatarUrl: avatarUrl,
+            ),
+          ),
+        ),
+      );
+
+      // ACT
+      // ASSERT
+      final CircleAvatar imageNetworkFinder =
+          tester.firstWidget(find.byType(CircleAvatar));
+
+      expect(imageNetworkFinder.backgroundImage, isNull);
+
+      final Text textFinder = tester.firstWidget(find.byType(Text));
+
+      expect(textFinder.data, "ND");
+    });
+  });
 }

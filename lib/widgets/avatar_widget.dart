@@ -23,8 +23,10 @@ class AvatarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      backgroundImage: avatarUrl != null ? NetworkImage(avatarUrl!) : null,
-      child: avatarUrl == null
+      backgroundImage: avatarUrl == null || avatarUrl!.isEmpty
+          ? null
+          : NetworkImage(avatarUrl!),
+      child: avatarUrl == null || avatarUrl!.isEmpty
           ? Text(
               username != null ? _getInial() : "",
             )

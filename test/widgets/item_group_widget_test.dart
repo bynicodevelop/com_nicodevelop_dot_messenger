@@ -1,4 +1,5 @@
 import "package:com_nicodevelop_dotmessenger/widgets/item_group_widget.dart";
+import "package:timeago/timeago.dart" as timeago;
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:network_image_mock/network_image_mock.dart";
@@ -8,14 +9,16 @@ void main() {
       (WidgetTester tester) async {
     mockNetworkImagesFor(() async {
       // ARRANGE
+      final DateTime lastMessageTime = DateTime.now();
+
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
             body: ItemGroupWidget(
               avatarUrl: "https://www.google.com",
               displayName: "John Doe",
               lastMessage: "Hello",
-              lastMessageTime: "12:00",
+              lastMessageTime: lastMessageTime,
             ),
           ),
         ),
@@ -29,7 +32,7 @@ void main() {
 
       expect(find.text("John Doe"), findsOneWidget);
       expect(find.text("Hello"), findsOneWidget);
-      expect(find.text("12:00"), findsOneWidget);
+      expect(find.text(timeago.format(lastMessageTime)), findsOneWidget);
 
       final TextStyle styleDisplayName =
           tester.widget<Text>(find.text("John Doe")).style as TextStyle;
@@ -49,15 +52,17 @@ void main() {
   testWidgets("Doit vérifier que le message est lu",
       (WidgetTester tester) async {
     mockNetworkImagesFor(() async {
+      final DateTime lastMessageTime = DateTime.now();
+
       // ARRANGE
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
             body: ItemGroupWidget(
               avatarUrl: "https://www.google.com",
               displayName: "John Doe",
               lastMessage: "Hello",
-              lastMessageTime: "12:00",
+              lastMessageTime: lastMessageTime,
               isReaded: true,
             ),
           ),
@@ -72,7 +77,7 @@ void main() {
 
       expect(find.text("John Doe"), findsOneWidget);
       expect(find.text("Hello"), findsOneWidget);
-      expect(find.text("12:00"), findsOneWidget);
+      expect(find.text(timeago.format(lastMessageTime)), findsOneWidget);
 
       // get style of text
       final TextStyle styleDisplayName =
@@ -94,6 +99,7 @@ void main() {
   testWidgets("Doit permettre d'être cliquable", (WidgetTester tester) async {
     mockNetworkImagesFor(() async {
       // ARRANGE
+      final DateTime lastMessageTime = DateTime.now();
       bool isClicked = false;
 
       await tester.pumpWidget(
@@ -103,7 +109,7 @@ void main() {
               avatarUrl: "https://www.google.com",
               displayName: "John Doe",
               lastMessage: "Hello",
-              lastMessageTime: "12:00",
+              lastMessageTime: lastMessageTime,
               onTap: () => isClicked = true,
             ),
           ),

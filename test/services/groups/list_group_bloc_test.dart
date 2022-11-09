@@ -70,7 +70,7 @@ void main() {
         groups: [
           {
             "uid": "uid",
-            "avatarUrl": "https://placekitten.com/250/250?img=1",
+            "photoUrl": "https://placekitten.com/250/250?img=1",
             "lastMessage": "Hey, how are you?",
             "lastMessageTime": "12:30",
             "displayName": "John Doe",
@@ -84,7 +84,7 @@ void main() {
           groups: [
             {
               "uid": "uid",
-              "avatarUrl": "https://placekitten.com/250/250?img=1",
+              "photoUrl": "https://placekitten.com/250/250?img=1",
               "lastMessage": "Hey, how are you?",
               "lastMessageTime": "12:30",
               "displayName": "John Doe",

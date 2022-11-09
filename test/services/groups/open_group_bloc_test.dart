@@ -16,8 +16,17 @@ void main() {
       build: () {
         group = {
           "uid": "uid",
-          "displayName": "displayName",
-          "photoUrl": "photoUrl",
+          "users": [
+            {
+              "displayName": "displayName1",
+              "photoUrl": "photoUrl1",
+              "currentUser": true,
+            },
+            {
+              "displayName": "displayName2",
+              "photoUrl": "photoUrl2",
+            }
+          ],
         };
 
         return openGroupBloc;

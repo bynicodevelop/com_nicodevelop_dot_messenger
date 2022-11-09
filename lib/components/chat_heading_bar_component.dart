@@ -1,6 +1,9 @@
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
+import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
 import "package:com_nicodevelop_dotmessenger/widgets/avatar_widget.dart";
 import "package:flutter/material.dart";
+
+import "package:com_nicodevelop_dotmessenger/utils/string_casting_extension.dart";
 
 class ChatHeadingBarComponent extends StatelessWidget {
   final Map<String, dynamic> profile;
@@ -12,6 +15,11 @@ class ChatHeadingBarComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    info(
+      "ChatHeadingBarComponent.build",
+      data: profile,
+    );
+
     if (profile.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -22,13 +30,13 @@ class ChatHeadingBarComponent extends StatelessWidget {
         children: [
           AvatarWidget(
             avatarUrl: profile["photoUrl"],
-            username: profile["username"],
+            username: profile["displayName"],
           ),
           const SizedBox(
             height: 10,
           ),
           Text(
-            profile["displayName"],
+            (profile["displayName"] as String).toTitleCase(),
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w300,
@@ -39,31 +47,36 @@ class ChatHeadingBarComponent extends StatelessWidget {
     }
 
     if (ResponsiveComponent.device == DeviceEnum.tablet) {
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          AvatarWidget(
-            avatarUrl: profile["photoUrl"],
-            username: profile["username"],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 20.0,
-              horizontal: 10.0,
+      return Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            AvatarWidget(
+              avatarUrl: profile["photoUrl"],
+              username: profile["displayName"],
             ),
-            child: Column(
-              children: [
-                Text(
-                  profile["displayName"],
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w300,
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 20.0,
+                horizontal: 10.0,
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    (profile["displayName"] as String).toTitleCase(),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       );
     }
 
@@ -78,13 +91,13 @@ class ChatHeadingBarComponent extends StatelessWidget {
         children: [
           AvatarWidget(
             avatarUrl: profile["photoUrl"],
-            username: profile["username"],
+            username: profile["displayName"],
           ),
           const SizedBox(
             height: 10,
           ),
           Text(
-            profile["displayName"],
+            (profile["displayName"] as String).toTitleCase(),
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w300,

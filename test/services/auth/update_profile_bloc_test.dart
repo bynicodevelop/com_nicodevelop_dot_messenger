@@ -81,7 +81,7 @@ void main() {
     expect: () => [
       UpdateProfileLoadingState(),
       const UpdateProfileFailureState(
-        code: "unauthenticated_user",
+        code: "unauthenticated",
       ),
     ],
   );

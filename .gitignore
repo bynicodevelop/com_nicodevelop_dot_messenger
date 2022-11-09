@@ -15,6 +15,7 @@ migrate_working_dir/
 *.ipr
 *.iws
 .idea/
+.vscode/
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
@@ -49,12 +50,18 @@ ios/firebase_app_id_file.json
 ios/Runner/GoogleService-Info.plist
 macos/firebase_app_id_file.json
 android/app/google-services.json
+macos/Runner/GoogleService-Info.plist
+
 lib/firebase_options.dart
 
 server/.firebaserc
 server/functions/.env
+server/functions/.env.production
 server/functions/node_modules
 
 server/functions/assets/mails/build_local
 server/functions/assets/mails/templates
 server/functions/assets/mails/node_modules
+
+coverage/
+server/build/web

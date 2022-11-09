@@ -35,7 +35,7 @@ void main() {
       when(unawaited(profileRepository.deleteAccount()))
           .thenThrow(const AuthenticationException(
         "User is not authenticated",
-        "unauthenticated_user",
+        "unauthenticated",
       ));
 
       return DeleteAccountBloc(
@@ -46,7 +46,7 @@ void main() {
     expect: () => [
       DeleteAccountLoadingState(),
       const DeleteAccountFailureState(
-        "unauthenticated_user",
+        "unauthenticated",
       ),
     ],
   );
