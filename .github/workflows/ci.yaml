@@ -1,0 +1,13 @@
+name: Quality checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  testing-web:
+    uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/tests.yaml@main

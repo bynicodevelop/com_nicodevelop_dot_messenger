@@ -1,14 +1,15 @@
 name: Deploy
 
 on:
-  push:
+  release:
+    types: [published]
 
 jobs:
   testing-web:
-    uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/tests.yaml@develop
+    uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/tests.yaml@main
 
   build-server:
-    uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/build-server.yaml@develop
+    uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/build-server.yaml@main
     secrets:
       env: ${{ secrets.ENV }}
       firebaserc: ${{ secrets.FIREBASERC }}
@@ -16,7 +17,7 @@ jobs:
 
   build-web:
     needs: [testing-web]
-    uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/build-web.yaml@develop
+    uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/build-web.yaml@main
     secrets:
       firebaserc: ${{ secrets.FIREBASERC }}
       firebase_options: ${{ secrets.FIREBASE_OPTIONS }}
