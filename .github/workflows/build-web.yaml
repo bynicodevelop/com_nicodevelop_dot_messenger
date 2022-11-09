@@ -57,7 +57,7 @@ jobs:
       - name: Move build to server
         run: |
           ls -la build/web
-          mv build/web server/build/web
+          mv build/web/* server/build/web/*
           ls -la server/build/web
 
       - name: Deploy web
