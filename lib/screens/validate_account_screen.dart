@@ -119,6 +119,13 @@ class _ValidateAccountScreenState extends State<ValidateAccountScreen> {
                 child: BlocListener<ValidateAccountBloc, ValidateAccountState>(
                   listener: (context, state) async {
                     if (state is ValidateAccountFailureState) {
+                      _controller0.clear();
+                      _controller1.clear();
+                      _controller2.clear();
+                      _controller3.clear();
+
+                      _focusNode0.requestFocus();
+
                       return notice(
                         context,
                         state.code,

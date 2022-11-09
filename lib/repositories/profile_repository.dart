@@ -89,6 +89,18 @@ class ProfileRepository {
     DocumentSnapshot<Map<String, dynamic>> checkCodeSnapshot =
         await firestore.collection("check_codes").doc(user!.uid).get();
 
+    if (!checkCodeSnapshot.exists) {
+      warn(
+        "Code not found",
+        data: data,
+      );
+
+      throw const ValidateAccountException(
+        "Invalid code",
+        "invalid_code",
+      );
+    }
+
     final Map<String, dynamic> checkCodeData = checkCodeSnapshot.data()!;
 
     if (checkCodeData["code"].toString() != data["code"].toString()) {
