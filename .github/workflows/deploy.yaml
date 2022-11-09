@@ -22,7 +22,6 @@ jobs:
       firebase_options: ${{ secrets.FIREBASE_OPTIONS }}
 
   deploy-server:
-    needs: [build-server]
     runs-on: ubuntu-latest
 
     steps:
@@ -32,7 +31,7 @@ jobs:
           firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
 
   deploy-web:
-    needs: [deploy-server, build-web]
+    needs: [deploy-server]
     runs-on: ubuntu-latest
 
     steps:
