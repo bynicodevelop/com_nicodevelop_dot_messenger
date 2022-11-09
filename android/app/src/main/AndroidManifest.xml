@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.com_nicodevelop_dotmessenger">
+    package="com.dotmessenger.app">
    <application
         android:usesCleartextTraffic="true"
         android:label="com_nicodevelop_dotmessenger"
