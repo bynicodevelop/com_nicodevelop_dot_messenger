@@ -9,6 +9,8 @@ on:
     secrets:
       firebase_options:
         required: true
+      firebase_token:
+        required: true
   
 jobs:
   build-server:
@@ -46,3 +48,8 @@ jobs:
       - name: Move build to server
         run: |
           mv build/web ${{ inputs.config-path }}
+
+      - name: Deploy web
+        run: |
+          cd server
+          firebase deploy --only functions --token ${{ secrets.firebase_token }}
