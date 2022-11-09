@@ -20,5 +20,6 @@ jobs:
     with:
       config-path: 'server/build/web'
     secrets:
+      firebaserc: ${{ secrets.FIREBASERC }}
       firebase_options: ${{ secrets.FIREBASE_OPTIONS }}
       firebase_token: ${{ secrets.FIREBASE_TOKEN }}

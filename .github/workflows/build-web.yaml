@@ -7,6 +7,8 @@ on:
         required: true
         type: string
     secrets:
+      firebaserc:
+        required: true
       firebase_options:
         required: true
       firebase_token:
@@ -38,6 +40,17 @@ jobs:
       - name: Move firebase_options.dart to lib folder
         run: |
           mv ${{ steps.firebase_options.outputs.filePath }} lib
+
+      - name: Create .firebaserc file
+        id: firebaserc
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: ".firebaserc"
+          encodedString: ${{ secrets.firebaserc }}
+
+      - name: Move .env firebaserc to server
+        run: |
+          mv ${{ steps.firebaserc.outputs.filePath }} server/.firebaserc
 
       - name: Flutter import dependencies
         run: flutter pub get
