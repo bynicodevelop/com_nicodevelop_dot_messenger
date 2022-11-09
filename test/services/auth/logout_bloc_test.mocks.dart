@@ -73,6 +73,12 @@ class MockProfileRepository extends _i1.Mock implements _i4.ProfileRepository {
         ),
       ) as _i3.FirebaseFirestore);
   @override
+  _i5.Stream<_i6.UserModel?> get userModel => (super.noSuchMethod(
+        Invocation.getter(#userModel),
+        returnValue: _i5.Stream<_i6.UserModel?>.empty(),
+        returnValueForMissingStub: _i5.Stream<_i6.UserModel?>.empty(),
+      ) as _i5.Stream<_i6.UserModel?>);
+  @override
   _i5.Future<_i6.UserModel?> get user => (super.noSuchMethod(
         Invocation.getter(#user),
         returnValue: _i5.Future<_i6.UserModel?>.value(),

@@ -13,6 +13,13 @@ class UserModel extends Equatable {
     required this.emailVerified,
   });
 
+  static UserModel empty() => const UserModel(
+        uid: "",
+        displayName: "",
+        email: "",
+        emailVerified: false,
+      );
+
   Map<String, dynamic> toMap() => {
         "uid": uid,
         "displayName": displayName,
