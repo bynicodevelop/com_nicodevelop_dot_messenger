@@ -22,12 +22,13 @@ jobs:
       firebase_options: ${{ secrets.FIREBASE_OPTIONS }}
 
   deploy-server:
-    needs: [build-server]
+    needs: [build-server, build-web]
     runs-on: ubuntu-latest
 
     steps:
       - name: Deploy serveur
         run: |
+          ls -la
           cd server
           firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
 
