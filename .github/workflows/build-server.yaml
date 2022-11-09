@@ -61,7 +61,7 @@ jobs:
         run: |
           mv ${{ steps.firebaserc.outputs.filePath }} server/.firebaserc
 
-      - name: Deploy serveur
+      - name: Deploy server
         run: |
           cd server
           firebase deploy --only functions --token ${{ secrets.firebase_token }}

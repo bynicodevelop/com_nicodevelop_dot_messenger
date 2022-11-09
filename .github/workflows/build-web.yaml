@@ -65,4 +65,4 @@ jobs:
       - name: Deploy web
         run: |
           cd server
-          firebase deploy --only functions --token ${{ secrets.firebase_token }}
+          firebase deploy --only hosting --token ${{ secrets.firebase_token }}

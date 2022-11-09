@@ -4,7 +4,7 @@ on:
   push:
 
 jobs:
-  testing:
+  testing-web:
     uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/tests.yaml@develop
 
   build-server:
@@ -15,7 +15,7 @@ jobs:
       firebase_token: ${{ secrets.FIREBASE_TOKEN }}
 
   build-web:
-    needs: [testing]
+    needs: [testing-web]
     uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/build-web.yaml@develop
     with:
       config-path: 'server/build/web'
