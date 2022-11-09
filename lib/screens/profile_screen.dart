@@ -2,6 +2,7 @@ import "package:com_nicodevelop_dotmessenger/components/auth_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/buttons/delete_account_button_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/input_edit_field_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
+import "package:com_nicodevelop_dotmessenger/models/user_model.dart";
 import "package:com_nicodevelop_dotmessenger/screens/login_screen.dart";
 import "package:com_nicodevelop_dotmessenger/screens/validate_account_screen.dart";
 import "package:com_nicodevelop_dotmessenger/services/auth/logout/logout_bloc.dart";
@@ -9,7 +10,6 @@ import "package:com_nicodevelop_dotmessenger/services/auth/profile/profile_bloc.
 import "package:com_nicodevelop_dotmessenger/services/auth/update_profile/update_profile_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/utils/notice.dart";
 import "package:com_nicodevelop_dotmessenger/widgets/input_decorator_widget.dart";
-import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 
@@ -61,10 +61,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
           child: BlocBuilder<ProfileBloc, ProfileState>(
             builder: (context, state) {
-              User? user = (state as ProfileSuccessState).user;
+              UserModel? user = (state as ProfileSuccessState).user;
 
-              _displayNameController.text = user.displayName ?? "";
-              _emailController.text = user.email ?? "";
+              _displayNameController.text = user.displayName;
+              _emailController.text = user.email;
 
               return Center(
                 child: SingleChildScrollView(

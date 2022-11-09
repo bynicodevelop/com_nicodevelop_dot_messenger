@@ -1,4 +1,5 @@
 import "package:bloc_test/bloc_test.dart";
+import "package:com_nicodevelop_dotmessenger/models/user_model.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/profile_repository.dart";
 import "package:com_nicodevelop_dotmessenger/services/auth/profile/profile_bloc.dart";
 import "package:firebase_auth_mocks/firebase_auth_mocks.dart";
@@ -21,7 +22,12 @@ void main() {
     build: () {
       final ProfileRepository profileRepository = MockProfileRepository();
 
-      when(profileRepository.user).thenAnswer((_) async => user);
+      when(profileRepository.user).thenAnswer((_) async => UserModel.fromMap({
+            "uid": user.uid,
+            "displayName": user.displayName,
+            "email": user.email,
+            "emailVerified": user.emailVerified,
+          }));
 
       return ProfileBloc(
         profileRepository,
@@ -31,7 +37,12 @@ void main() {
     expect: () => [
       ProfileLoadingState(),
       ProfileSuccessState(
-        user: user,
+        user: UserModel.fromMap({
+          "uid": user.uid,
+          "displayName": user.displayName,
+          "email": user.email,
+          "emailVerified": user.emailVerified,
+        }),
       ),
     ],
   );

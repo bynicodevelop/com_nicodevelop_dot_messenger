@@ -6,6 +6,7 @@
 import 'dart:async' as _i5;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i3;
+import 'package:com_nicodevelop_dotmessenger/models/user_model.dart' as _i6;
 import 'package:com_nicodevelop_dotmessenger/repositories/profile_repository.dart'
     as _i4;
 import 'package:firebase_auth/firebase_auth.dart' as _i2;
@@ -72,11 +73,11 @@ class MockProfileRepository extends _i1.Mock implements _i4.ProfileRepository {
         ),
       ) as _i3.FirebaseFirestore);
   @override
-  _i5.Future<_i2.User?> get user => (super.noSuchMethod(
+  _i5.Future<_i6.UserModel?> get user => (super.noSuchMethod(
         Invocation.getter(#user),
-        returnValue: _i5.Future<_i2.User?>.value(),
-        returnValueForMissingStub: _i5.Future<_i2.User?>.value(),
-      ) as _i5.Future<_i2.User?>);
+        returnValue: _i5.Future<_i6.UserModel?>.value(),
+        returnValueForMissingStub: _i5.Future<_i6.UserModel?>.value(),
+      ) as _i5.Future<_i6.UserModel?>);
   @override
   _i5.Future<void> validateEmail(Map<String, dynamic>? data) =>
       (super.noSuchMethod(

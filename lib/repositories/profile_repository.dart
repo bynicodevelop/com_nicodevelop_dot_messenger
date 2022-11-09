@@ -1,6 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:com_nicodevelop_dotmessenger/exceptions/update_profile_exception.dart";
 import "package:com_nicodevelop_dotmessenger/exceptions/validate_account_exception.dart";
+import "package:com_nicodevelop_dotmessenger/models/user_model.dart";
 import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
 import "package:com_nicodevelop_dotmessenger/utils/unauthenticated_helper.dart";
 import "package:firebase_auth/firebase_auth.dart";
@@ -34,10 +35,15 @@ class ProfileRepository {
     }
   }
 
-  Future<User?> get user async {
+  Future<UserModel?> get user async {
     await auth.currentUser?.reload();
 
-    return auth.currentUser;
+    return UserModel.fromMap({
+      "uid": auth.currentUser?.uid ?? "",
+      "displayName": auth.currentUser?.displayName ?? "",
+      "email": auth.currentUser?.email ?? "",
+      "emailVerified": auth.currentUser?.emailVerified ?? false,
+    });
   }
 
   Future<void> validateEmail(Map<String, dynamic> data) async {
