@@ -60,6 +60,5 @@ jobs:
 
       - name: Deploy serveur
         run: |
-          ls -la
           cd server
           firebase deploy --only functions --token ${{ secrets.firebase_token }}
