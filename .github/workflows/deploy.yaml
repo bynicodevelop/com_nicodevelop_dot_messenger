@@ -22,6 +22,7 @@ jobs:
       firebase_options: ${{ secrets.FIREBASE_OPTIONS }}
 
   deploy-server:
+    needs: [build-server]
     runs-on: ubuntu-latest
 
     steps:
