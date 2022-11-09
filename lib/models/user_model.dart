@@ -17,7 +17,7 @@ class UserModel extends Equatable {
         uid: "",
         displayName: "",
         email: "",
-        emailVerified: false,
+        emailVerified: true,
       );
 
   Map<String, dynamic> toMap() => {

@@ -1,6 +1,7 @@
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
+import "package:com_nicodevelop_dotmessenger/models/user_model.dart";
 import "package:com_nicodevelop_dotmessenger/screens/validate_account_screen.dart";
-import "package:com_nicodevelop_dotmessenger/services/auth/profile/profile_bloc.dart";
+import "package:com_nicodevelop_dotmessenger/services/auth/email_verified/email_verified_bloc.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 
@@ -16,14 +17,12 @@ class ValidateAccountComponent extends StatelessWidget {
     return Stack(
       children: [
         child,
-        BlocBuilder<ProfileBloc, ProfileState>(
-          bloc: context.read<ProfileBloc>()..add(OnProfileEvent()),
+        BlocBuilder<EmailVerifiedBloc, EmailVerifiedState>(
+          // bloc: context.read<ProfileBloc>()..add(OnProfileEvent()),
           builder: (context, state) {
-            if (state is! ProfileSuccessState) {
-              return const SizedBox.shrink();
-            }
+            UserModel user = (state as EmailVerifiedInitialState).user;
 
-            if (state.user.emailVerified) {
+            if (user.emailVerified) {
               return const SizedBox.shrink();
             }
 

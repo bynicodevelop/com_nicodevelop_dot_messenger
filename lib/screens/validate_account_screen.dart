@@ -1,5 +1,7 @@
 import "package:clipboard/clipboard.dart";
+import "package:com_nicodevelop_dotmessenger/models/user_model.dart";
 import "package:com_nicodevelop_dotmessenger/screens/home_screen.dart";
+import "package:com_nicodevelop_dotmessenger/services/auth/email_verified/email_verified_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/auth/resend_confirm_mail/resend_confirm_mail_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/auth/validate_account/validate_account_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/utils/notice.dart";
@@ -96,92 +98,90 @@ class _ValidateAccountScreenState extends State<ValidateAccountScreen> {
               SizedBox(
                 height: _defaultSpacing,
               ),
-              BlocListener<ValidateAccountBloc, ValidateAccountState>(
+              BlocListener<EmailVerifiedBloc, EmailVerifiedState>(
                 listener: (context, state) async {
-                  if (state is ValidateAccountFailureState) {
-                    return notice(
-                      context,
-                      state.code,
-                    );
-                  }
+                  UserModel user = (state as EmailVerifiedInitialState).user;
 
-                  if (state is ValidateAccountSuccessState) {
+                  if (user.emailVerified) {
                     notice(
                       context,
                       "Account validated successfully",
                     );
 
-                    Future.delayed(
-                      const Duration(
-                        milliseconds: 1500,
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreen(),
                       ),
-                      () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
-                          ),
-                          (route) => false,
-                        );
-                      },
+                      (route) => false,
                     );
                   }
                 },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _fieldBuilder(
-                      _controller0,
-                      _focusNode0,
-                      (String value) {
-                        if (value.length == 1) {
-                          _focusNode1.requestFocus();
-                        }
-                      },
-                    ),
-                    SizedBox(
-                      width: _defaultSpacing,
-                    ),
-                    _fieldBuilder(
-                      _controller1,
-                      _focusNode1,
-                      (String value) {
-                        if (value.length == 1) {
-                          _focusNode2.requestFocus();
-                        }
-                      },
-                    ),
-                    SizedBox(
-                      width: _defaultSpacing,
-                    ),
-                    _fieldBuilder(
-                      _controller2,
-                      _focusNode2,
-                      (String value) {
-                        if (value.length == 1) {
-                          _focusNode3.requestFocus();
-                        }
-                      },
-                    ),
-                    SizedBox(
-                      width: _defaultSpacing,
-                    ),
-                    _fieldBuilder(
-                      _controller3,
-                      _focusNode3,
-                      (String value) {
-                        if (value.length == 1) {
-                          context.read<ValidateAccountBloc>().add(
-                                OnValidateAccountEvent(
-                                  _controller0.text +
-                                      _controller1.text +
-                                      _controller2.text +
-                                      _controller3.text,
-                                ),
-                              );
-                        }
-                      },
-                    ),
-                  ],
+                child: BlocListener<ValidateAccountBloc, ValidateAccountState>(
+                  listener: (context, state) async {
+                    if (state is ValidateAccountFailureState) {
+                      return notice(
+                        context,
+                        state.code,
+                      );
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _fieldBuilder(
+                        _controller0,
+                        _focusNode0,
+                        (String value) {
+                          if (value.length == 1) {
+                            _focusNode1.requestFocus();
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        width: _defaultSpacing,
+                      ),
+                      _fieldBuilder(
+                        _controller1,
+                        _focusNode1,
+                        (String value) {
+                          if (value.length == 1) {
+                            _focusNode2.requestFocus();
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        width: _defaultSpacing,
+                      ),
+                      _fieldBuilder(
+                        _controller2,
+                        _focusNode2,
+                        (String value) {
+                          if (value.length == 1) {
+                            _focusNode3.requestFocus();
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        width: _defaultSpacing,
+                      ),
+                      _fieldBuilder(
+                        _controller3,
+                        _focusNode3,
+                        (String value) {
+                          if (value.length == 1) {
+                            context.read<ValidateAccountBloc>().add(
+                                  OnValidateAccountEvent(
+                                    _controller0.text +
+                                        _controller1.text +
+                                        _controller2.text +
+                                        _controller3.text,
+                                  ),
+                                );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(

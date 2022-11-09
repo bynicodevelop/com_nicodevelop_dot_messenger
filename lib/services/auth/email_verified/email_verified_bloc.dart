@@ -16,7 +16,7 @@ class EmailVerifiedBloc extends Bloc<EmailVerifiedEvent, EmailVerifiedState> {
         )) {
     profileRepository.userModel.listen((user) {
       add(OnEmailVerifiedEvent(
-        user: UserModel.empty(),
+        user: user ?? UserModel.empty(),
       ));
     });
 

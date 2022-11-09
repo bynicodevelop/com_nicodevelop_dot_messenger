@@ -2,7 +2,7 @@ import "package:com_nicodevelop_dotmessenger/components/responsive_component.dar
 import "package:com_nicodevelop_dotmessenger/components/validate_account_component.dart";
 import "package:com_nicodevelop_dotmessenger/models/user_model.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/profile_repository.dart";
-import "package:com_nicodevelop_dotmessenger/services/auth/profile/profile_bloc.dart";
+import "package:com_nicodevelop_dotmessenger/services/auth/email_verified/email_verified_bloc.dart";
 import "package:firebase_auth_mocks/firebase_auth_mocks.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
@@ -30,12 +30,14 @@ void main() {
 
     final ProfileRepository profileRepository = MockProfileRepository();
 
-    when(profileRepository.user).thenAnswer((_) async => UserModel.fromMap({
-          "uid": user.uid,
-          "displayName": user.displayName,
-          "email": user.email,
-          "emailVerified": user.emailVerified,
-        }));
+    when(profileRepository.userModel).thenAnswer(
+      (_) => Stream.value(UserModel.fromMap({
+        "uid": user.uid,
+        "displayName": user.displayName,
+        "email": user.email,
+        "emailVerified": user.emailVerified,
+      })),
+    );
 
     // ARRAGE
     await tester.pumpWidget(MaterialApp(
@@ -45,8 +47,8 @@ void main() {
         BoxConstraints constraints,
       ) {
         return Scaffold(
-          body: BlocProvider<ProfileBloc>(
-            create: (context) => ProfileBloc(
+          body: BlocProvider<EmailVerifiedBloc>(
+            create: (context) => EmailVerifiedBloc(
               profileRepository,
             ),
             child: const ValidateAccountComponent(
@@ -83,12 +85,14 @@ void main() {
 
     final ProfileRepository profileRepository = MockProfileRepository();
 
-    when(profileRepository.user).thenAnswer((_) async => UserModel.fromMap({
-          "uid": user.uid,
-          "displayName": user.displayName,
-          "email": user.email,
-          "emailVerified": user.emailVerified,
-        }));
+    when(profileRepository.userModel).thenAnswer(
+      (_) => Stream.value(UserModel.fromMap({
+        "uid": user.uid,
+        "displayName": user.displayName,
+        "email": user.email,
+        "emailVerified": user.emailVerified,
+      })),
+    );
 
     // ARRAGE
     await tester.pumpWidget(MaterialApp(
@@ -98,8 +102,8 @@ void main() {
         BoxConstraints constraints,
       ) {
         return Scaffold(
-          body: BlocProvider<ProfileBloc>(
-            create: (context) => ProfileBloc(
+          body: BlocProvider<EmailVerifiedBloc>(
+            create: (context) => EmailVerifiedBloc(
               profileRepository,
             ),
             child: const ValidateAccountComponent(

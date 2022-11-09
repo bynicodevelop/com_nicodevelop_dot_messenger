@@ -3,6 +3,7 @@ import "package:com_nicodevelop_dotmessenger/repositories/group_repository.dart"
 import "package:com_nicodevelop_dotmessenger/repositories/profile_repository.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/search_repository.dart";
 import "package:com_nicodevelop_dotmessenger/services/auth/delete_account/delete_account_bloc.dart";
+import "package:com_nicodevelop_dotmessenger/services/auth/email_verified/email_verified_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/auth/login/login_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/auth/logout/logout_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/auth/profile/profile_bloc.dart";
@@ -57,6 +58,12 @@ class ServiceFactory extends StatelessWidget {
           lazy: true,
           create: (_) => LoadMessagesBloc(
             chatRepository,
+          ),
+        ),
+        BlocProvider<EmailVerifiedBloc>(
+          lazy: true,
+          create: (_) => EmailVerifiedBloc(
+            profileRepository,
           ),
         ),
         BlocProvider<UpdateProfileBloc>(
