@@ -83,6 +83,9 @@ jobs:
         run: |
           mv build/web server/build/web
 
+      - name: Install firebase-tools
+        run: npm install -g firebase-tools
+
       - name: Deploy serveur
         run: |
           cd server
@@ -91,6 +94,6 @@ jobs:
       - name: Deploy client
         run: |
           cd server
-          firebase deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }}
+          firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
 
       
