@@ -2,6 +2,11 @@ name: Build Server
 
 on:
   workflow_call:
+    secrets:
+      env:
+        required: true
+      firebaserc:
+        required: true
   
 jobs:
   build-server:
@@ -34,7 +39,7 @@ jobs:
         uses: timheuer/base64-to-file@v1.2
         with:
           fileName: ".env"
-          encodedString: ${{ secrets.ENV }}
+          encodedString: ${{ secrets.env }}
 
       - name: Move .env file to server
         run: |
@@ -45,7 +50,7 @@ jobs:
         uses: timheuer/base64-to-file@v1.2
         with:
           fileName: ".firebaserc"
-          encodedString: ${{ secrets.FIREBASERC }}
+          encodedString: ${{ secrets.firebaserc }}
 
       - name: Move .env firebaserc to server
         run: |

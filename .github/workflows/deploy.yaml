@@ -9,12 +9,20 @@ jobs:
 
   build-server:
     uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/build-server.yaml@develop
+    secrets:
+      env: ${{ secrets.ENV }}
+      firebaserc: ${{ secrets.FIREBASERC }}
 
   build-web:
+    needs: [testing]
     uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/build-web.yaml@develop
+    with:
+      config-path: 'server/build/web'
+    secrets:
+      firebase_options: ${{ secrets.FIREBASE_OPTIONS }}
 
   deploy-server:
-    # needs: build
+    needs: [build-server]
     runs-on: ubuntu-latest
 
     steps:
@@ -23,9 +31,12 @@ jobs:
           cd server
           firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
 
-      - name: Deploy client
+  deploy-web:
+    needs: [deploy-server, build-web]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy web
         run: |
           cd server
           firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
-
-      

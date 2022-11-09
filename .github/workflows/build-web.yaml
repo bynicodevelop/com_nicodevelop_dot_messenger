@@ -2,6 +2,13 @@ name: Build Web
 
 on:
   workflow_call:
+    inputs:
+      config-path:
+        required: true
+        type: string
+    secrets:
+      firebase_options:
+        required: true
   
 jobs:
   build-server:
@@ -24,7 +31,7 @@ jobs:
         uses: timheuer/base64-to-file@v1.2
         with:
           fileName: "firebase_options.dart"
-          encodedString: ${{ secrets.FIREBASE_OPTIONS }}
+          encodedString: ${{ secrets.firebase_options }}
 
       - name: Move firebase_options.dart to lib folder
         run: |
@@ -38,4 +45,4 @@ jobs:
 
       - name: Move build to server
         run: |
-          mv build/web server/build/web
+          mv build/web ${{ inputs.config-path }}
