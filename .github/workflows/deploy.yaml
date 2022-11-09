@@ -17,8 +17,6 @@ jobs:
   build-web:
     needs: [testing-web]
     uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/build-web.yaml@develop
-    with:
-      config-path: 'server/build/web'
     secrets:
       firebaserc: ${{ secrets.FIREBASERC }}
       firebase_options: ${{ secrets.FIREBASE_OPTIONS }}

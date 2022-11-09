@@ -2,10 +2,6 @@ name: Build Web
 
 on:
   workflow_call:
-    inputs:
-      config-path:
-        required: true
-        type: string
     secrets:
       firebaserc:
         required: true
@@ -60,7 +56,9 @@ jobs:
 
       - name: Move build to server
         run: |
-          mv build/web ${{ inputs.config-path }}
+          ls -la build/web
+          mv build/web server/build/web
+          ls -la server/build/web
 
       - name: Deploy web
         run: |
