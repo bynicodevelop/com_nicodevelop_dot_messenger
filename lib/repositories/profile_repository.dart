@@ -35,6 +35,32 @@ class ProfileRepository {
     }
   }
 
+  Stream<UserModel?> get userModel {
+    User? user = auth.currentUser;
+
+    if (user == null) {
+      return const Stream.empty();
+    }
+
+    return firestore
+        .collection("users")
+        .doc(user.uid)
+        .snapshots()
+        .map((DocumentSnapshot<Map<String, dynamic>> snapshot) {
+      if (snapshot.exists) {
+        return UserModel.fromMap({
+          "emailVerified": user.emailVerified,
+          "email": user.email,
+          "displayName": user.displayName,
+          ...snapshot.data() ?? {},
+          "uid": user.uid,
+        });
+      }
+
+      return null;
+    });
+  }
+
   Future<UserModel?> get user async {
     await auth.currentUser?.reload();
 
