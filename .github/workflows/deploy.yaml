@@ -4,88 +4,20 @@ on:
   push:
 
 jobs:
-  # build:
-  #   uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/tests.yaml@develop
+  testing:
+    uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/tests.yaml@develop
+
+  build-server:
+    uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/build-server.yaml@develop
+
+  build-web:
+    uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/build-web.yaml@develop
 
   deploy-server:
     # needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: $/.npm
-          key: $-node-$
-          restore-keys: $-node-
-
-      - name: Install dependencies
-        run: npm --prefix server/functions ci
-
-      - name: Build functions
-        run: npm --prefix server/functions run build
-
-      - name: Create .env file
-        id: env
-        uses: timheuer/base64-to-file@v1.2
-        with:
-          fileName: ".env"
-          encodedString: ${{ secrets.ENV }}
-
-      - name: Move .env file to server
-        run: |
-          mv ${{ steps.env.outputs.filePath }} server/functions/.env
-
-      - name: Create .firebaserc file
-        id: firebaserc
-        uses: timheuer/base64-to-file@v1.2
-        with:
-          fileName: ".firebaserc"
-          encodedString: ${{ secrets.FIREBASERC }}
-
-      - name: Move .env firebaserc to server
-        run: |
-          mv ${{ steps.firebaserc.outputs.filePath }} server/.firebaserc
-
-      - name: Create firebase_options.dart file
-        id: firebase_options
-        uses: timheuer/base64-to-file@v1.2
-        with:
-          fileName: "firebase_options.dart"
-          encodedString: ${{ secrets.FIREBASE_OPTIONS }}
-
-      - name: Move firebase_options.dart to lib folder
-        run: |
-          mv ${{ steps.firebase_options.outputs.filePath }} lib
-
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.3.7'
-          channel: 'stable'
-
-      - run: flutter --version
-
-      - name: Flutter import dependencies
-        run: flutter pub get
-
-      - name: Flutter build
-        run: flutter build web
-
-      - name: Move build to server
-        run: |
-          mv build/web server/build/web
-
-      - name: Install firebase-tools
-        run: npm install -g firebase-tools
-
       - name: Deploy serveur
         run: |
           cd server
