@@ -43,7 +43,11 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
         child: PageView(
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),
-          onPageChanged: (value) => setState(() => _page = value),
+          onPageChanged: (value) {
+            FocusScope.of(context).unfocus();
+
+            setState(() => _page = value);
+          },
           children: [
             BlocBuilder<ListGroupBloc, ListGroupState>(
               builder: (context, state) {
