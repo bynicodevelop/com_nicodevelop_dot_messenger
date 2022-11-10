@@ -4,11 +4,11 @@ on:
   push:
 
 jobs:
-  # testing-web:
-  #   uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/tests.yaml@main
+  testing-web:
+    uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/tests.yaml@main
 
   build-apk:
-    # needs: [testing-web]
+    needs: [testing-web]
     name: Build APK
     runs-on: ubuntu-latest
 
@@ -51,8 +51,8 @@ jobs:
           echo "flutter.buildMode=release" > android/local.properties
           echo "flutter.versionName=1.0.0" >> android/local.properties
           echo "flutter.versionCode=1" >> android/local.properties
-          echo "flutter.minSdkVersion=21" >> android/local.properties
-          echo "flutter.targetSdkVersion=30" >> android/local.properties
+          echo "flutter.minSdkVersion=${{ secrets.MIN_SDK_VERSION }}" >> android/local.properties
+          echo "flutter.targetSdkVersion=${{ secrets.TARGET_SDK_VERSION }}" >> android/local.properties
 
       - name: Create key.properties
         run: |
