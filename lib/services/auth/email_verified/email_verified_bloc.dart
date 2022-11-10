@@ -1,3 +1,4 @@
+// ignore: depend_on_referenced_packages
 import "package:bloc/bloc.dart";
 import "package:com_nicodevelop_dotmessenger/models/user_model.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/profile_repository.dart";

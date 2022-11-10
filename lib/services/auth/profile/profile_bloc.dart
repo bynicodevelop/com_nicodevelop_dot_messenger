@@ -3,7 +3,6 @@ import "package:bloc/bloc.dart";
 import "package:com_nicodevelop_dotmessenger/models/user_model.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/profile_repository.dart";
 import "package:equatable/equatable.dart";
-import "package:firebase_auth/firebase_auth.dart";
 
 part "profile_event.dart";
 part "profile_state.dart";
