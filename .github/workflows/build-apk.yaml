@@ -31,6 +31,7 @@ jobs:
 
       - name: Replace YAML version with tag version
         run: |
+          sed -i 's/99.99.99+99/'$GIT_TAG_NAME'/g' pubspec.yaml|
           echo "Tag used version: "$GIT_TAG_NAME
 
       - name: Cache pub dependencies
@@ -61,8 +62,6 @@ jobs:
       - name: Create local.properties
         run: |
           echo "flutter.buildMode=release" > android/local.properties
-          echo "flutter.versionName=1.0.0" >> android/local.properties
-          echo "flutter.versionCode=1" >> android/local.properties
           echo "flutter.minSdkVersion=${{ secrets.MIN_SDK_VERSION }}" >> android/local.properties
           echo "flutter.targetSdkVersion=${{ secrets.TARGET_SDK_VERSION }}" >> android/local.properties
 
