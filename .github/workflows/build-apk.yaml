@@ -4,10 +4,11 @@ on:
   push:
 
 jobs:
-  testing-web:
-    uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/tests.yaml@main
+  # testing-web:
+  #   uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/tests.yaml@main
 
   build-apk:
+    # needs: [testing-web]
     name: Build APK
     runs-on: ubuntu-latest
 
@@ -39,6 +40,14 @@ jobs:
           echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
           echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+
+      - name: Create local.properties
+        run: |
+          echo "flutter.buildMode=release" > android/local.properties
+          echo "flutter.versionName=1.0.0" > android/local.properties
+          echo "flutter.versionCode=1" >> android/local.properties
+          echo "flutter.minSdkVersion=21" >> android/local.properties
+          echo "flutter.targetSdkVersion=30" >> android/local.properties
 
       - name: Create google-services.json
         id: google_services
