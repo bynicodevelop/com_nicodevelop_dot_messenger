@@ -1,6 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:com_nicodevelop_dotmessenger/exceptions/update_profile_exception.dart";
 import "package:com_nicodevelop_dotmessenger/exceptions/validate_account_exception.dart";
+import "package:com_nicodevelop_dotmessenger/models/user_model.dart";
 import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
 import "package:com_nicodevelop_dotmessenger/utils/unauthenticated_helper.dart";
 import "package:firebase_auth/firebase_auth.dart";
@@ -34,10 +35,41 @@ class ProfileRepository {
     }
   }
 
-  Future<User?> get user async {
+  Stream<UserModel?> get userModel {
+    User? user = auth.currentUser;
+
+    if (user == null) {
+      return const Stream.empty();
+    }
+
+    return firestore
+        .collection("users")
+        .doc(user.uid)
+        .snapshots()
+        .map((DocumentSnapshot<Map<String, dynamic>> snapshot) {
+      if (snapshot.exists) {
+        return UserModel.fromMap({
+          "emailVerified": user.emailVerified,
+          "email": user.email,
+          "displayName": user.displayName,
+          ...snapshot.data() ?? {},
+          "uid": user.uid,
+        });
+      }
+
+      return null;
+    });
+  }
+
+  Future<UserModel?> get user async {
     await auth.currentUser?.reload();
 
-    return auth.currentUser;
+    return UserModel.fromMap({
+      "uid": auth.currentUser?.uid ?? "",
+      "displayName": auth.currentUser?.displayName ?? "",
+      "email": auth.currentUser?.email ?? "",
+      "emailVerified": auth.currentUser?.emailVerified ?? false,
+    });
   }
 
   Future<void> validateEmail(Map<String, dynamic> data) async {
@@ -56,6 +88,18 @@ class ProfileRepository {
 
     DocumentSnapshot<Map<String, dynamic>> checkCodeSnapshot =
         await firestore.collection("check_codes").doc(user!.uid).get();
+
+    if (!checkCodeSnapshot.exists) {
+      warn(
+        "Code not found",
+        data: data,
+      );
+
+      throw const ValidateAccountException(
+        "Invalid code",
+        "invalid_code",
+      );
+    }
 
     final Map<String, dynamic> checkCodeData = checkCodeSnapshot.data()!;
 

@@ -1,5 +1,3 @@
-import "dart:io";
-
 import "package:com_nicodevelop_dotmessenger/components/bubble_event_wrapper_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
 import "package:com_nicodevelop_dotmessenger/services/chat/load_messages/load_messages_bloc.dart";
@@ -51,11 +49,7 @@ class _ChatMessageComponentState extends State<ChatMessageComponent> {
 
             return ListView.builder(
               padding: EdgeInsets.only(
-                top: kIsWeb
-                    ? 90
-                    : Platform.isIOS
-                        ? 150
-                        : 110,
+                top: kIsWeb ? 90 : 5,
                 left:
                     ResponsiveComponent.device != DeviceEnum.mobile ? 50 : 10.0,
                 right:

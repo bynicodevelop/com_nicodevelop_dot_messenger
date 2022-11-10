@@ -2,6 +2,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:com_nicodevelop_dotmessenger/exceptions/authentication_exception.dart";
 import "package:com_nicodevelop_dotmessenger/exceptions/update_profile_exception.dart";
 import "package:com_nicodevelop_dotmessenger/exceptions/validate_account_exception.dart";
+import "package:com_nicodevelop_dotmessenger/models/user_model.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/profile_repository.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
@@ -762,6 +763,45 @@ void main() {
         ),
       );
     });
+
+    test(
+        "Doit retourner une erreur si le code n'existe pas dans les code de validation",
+        () async {
+      // ARRANGE
+      final MockUser user = MockUser(
+        uid: "someuid",
+        email: "john@domain.tld",
+        displayName: "john",
+        isEmailVerified: false,
+      );
+
+      final FirebaseAuth firebaseAuth = MockFirebaseAuth(
+        signedIn: true,
+        mockUser: user,
+      );
+
+      final firebaseFirestoreMocked = FakeFirebaseFirestore();
+
+      final ProfileRepository profileRepository = ProfileRepository(
+        firebaseAuth,
+        firebaseFirestoreMocked,
+      );
+
+      // ACT
+      // ASSERT
+      expect(
+        () async => await profileRepository.validateEmail({
+          "code": "0987",
+        }),
+        throwsA(
+          isA<ValidateAccountException>().having(
+            (e) => e.code,
+            "code",
+            "invalid_code",
+          ),
+        ),
+      );
+    });
   });
 
   group("resendConfirmMail", () {
@@ -880,6 +920,184 @@ void main() {
             "unauthenticated",
           ),
         ),
+      );
+    });
+  });
+
+  group("userModel", () {
+    test("Doit retourner un utilisateur", () async {
+      // ARRANGE
+      final MockUser user = MockUser(
+        uid: "someuid",
+        email: "john@domain.tld",
+        displayName: "john",
+      );
+
+      final FirebaseAuth firebaseAuth = MockFirebaseAuth(
+        signedIn: true,
+        mockUser: user,
+      );
+
+      await firebaseFirestore.collection("users").doc("someuid").set({});
+
+      final ProfileRepository profileRepository = ProfileRepository(
+        firebaseAuth,
+        firebaseFirestore,
+      );
+
+      // ACT
+      // ASSERT
+      expect(
+        profileRepository.userModel,
+        emitsInOrder([
+          isA<UserModel>().having(
+            (e) => e.displayName,
+            "displayName",
+            "john",
+          ),
+        ]),
+      );
+    });
+
+    test("Doit retourner un utilisateur avec nom d'utilisateur réécrasé",
+        () async {
+      // ARRANGE
+      final MockUser user = MockUser(
+        uid: "someuid",
+        email: "john@domain.tld",
+        displayName: "john",
+      );
+
+      final FirebaseAuth firebaseAuth = MockFirebaseAuth(
+        signedIn: true,
+        mockUser: user,
+      );
+
+      await firebaseFirestore.collection("users").doc("someuid").set({
+        "displayName": "johnny",
+      });
+
+      final ProfileRepository profileRepository = ProfileRepository(
+        firebaseAuth,
+        firebaseFirestore,
+      );
+
+      // ACT
+      // ASSERT
+      expect(
+        profileRepository.userModel,
+        emitsInOrder([
+          isA<UserModel>().having(
+            (e) => e.displayName,
+            "displayName",
+            "johnny",
+          ),
+        ]),
+      );
+    });
+
+    test("Doit retourner un utilisateur avec un email non vérfié", () async {
+      // ARRANGE
+      final MockUser user = MockUser(
+        uid: "someuid",
+        email: "john@domain.tld",
+        displayName: "john",
+        isEmailVerified: false,
+      );
+
+      final FirebaseAuth firebaseAuth = MockFirebaseAuth(
+        signedIn: true,
+        mockUser: user,
+      );
+
+      final ProfileRepository profileRepository = ProfileRepository(
+        firebaseAuth,
+        firebaseFirestore,
+      );
+
+      // ACT
+      // ASSERT
+      expect(
+        profileRepository.userModel,
+        emitsInOrder([
+          isA<UserModel>().having(
+            (e) => e.emailVerified,
+            "emailVerified",
+            false,
+          ),
+        ]),
+      );
+    });
+
+    test("Doit retourner un utilisateur avec un email vérifié", () async {
+      // ARRANGE
+      final MockUser user = MockUser(
+        uid: "someuid",
+        email: "john@domain.tld",
+        displayName: "john",
+        isEmailVerified: true,
+      );
+
+      final FirebaseAuth firebaseAuth = MockFirebaseAuth(
+        signedIn: true,
+        mockUser: user,
+      );
+
+      final ProfileRepository profileRepository = ProfileRepository(
+        firebaseAuth,
+        firebaseFirestore,
+      );
+
+      // ACT
+      // ASSERT
+      expect(
+        profileRepository.userModel,
+        emitsInOrder([
+          isA<UserModel>().having(
+            (e) => e.emailVerified,
+            "emailVerified",
+            true,
+          ),
+        ]),
+      );
+    });
+
+    test(
+        "Doit retourner un utilisateur avec un email vérifié (en base de données)",
+        () async {
+      // ARRANGE
+      final MockUser user = MockUser(
+        uid: "someuid",
+        email: "john@domain.tld",
+        displayName: "john",
+        isEmailVerified: false,
+      );
+
+      final FirebaseAuth firebaseAuth = MockFirebaseAuth(
+        signedIn: true,
+        mockUser: user,
+      );
+
+      await firebaseFirestore.collection("users").doc("someuid").set({
+        "emailVerified": true,
+      });
+
+      final ProfileRepository profileRepository = ProfileRepository(
+        firebaseAuth,
+        firebaseFirestore,
+      );
+
+      // ACT
+      // ASSERT
+      expect(
+        profileRepository.userModel,
+        emitsInOrder([
+          isA<UserModel>().having(
+            (e) => e.emailVerified,
+            "emailVerified",
+            true,
+          ),
+        ]),
       );
     });
   });

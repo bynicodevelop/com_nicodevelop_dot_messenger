@@ -1,5 +1,3 @@
-import "dart:io";
-
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
 import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
 import "package:com_nicodevelop_dotmessenger/widgets/item_group_widget.dart";
@@ -43,12 +41,8 @@ class _ListGroupComponentState extends State<ListGroupComponent> {
 
     return ListView.builder(
       padding: ResponsiveComponent.device == DeviceEnum.mobile
-          ? EdgeInsets.only(
-              top: kIsWeb
-                  ? 90
-                  : Platform.isIOS
-                      ? 150
-                      : 110,
+          ? const EdgeInsets.only(
+              top: kIsWeb ? 90 : 5,
             )
           : null,
       itemCount: widget.groups.length,

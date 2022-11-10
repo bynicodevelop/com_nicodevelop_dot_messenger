@@ -5,6 +5,7 @@ import "package:com_nicodevelop_dotmessenger/responsive/mobile/screens/mobile_ch
 import "package:com_nicodevelop_dotmessenger/screens/search_screen.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter/material.dart";
 
@@ -42,7 +43,11 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
         child: PageView(
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),
-          onPageChanged: (value) => setState(() => _page = value),
+          onPageChanged: (value) {
+            FocusScope.of(context).unfocus();
+
+            setState(() => _page = value);
+          },
           children: [
             BlocBuilder<ListGroupBloc, ListGroupState>(
               builder: (context, state) {
@@ -55,23 +60,46 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
                   );
                 }
 
-                return ListGroupComponent(
-                  groups: groups,
-                  onTap: (Map<String, dynamic> group) async {
-                    openGroup(context, group);
+                if (kIsWeb) {
+                  return ListGroupComponent(
+                    groups: groups,
+                    onTap: (Map<String, dynamic> group) async {
+                      openGroup(context, group);
 
-                    _pageController.animateToPage(
-                      1,
-                      duration: const Duration(
-                        milliseconds: 300,
-                      ),
-                      curve: Curves.ease,
-                    );
-                  },
+                      _pageController.animateToPage(
+                        1,
+                        duration: const Duration(
+                          milliseconds: 300,
+                        ),
+                        curve: Curves.ease,
+                      );
+                    },
+                  );
+                }
+
+                return SafeArea(
+                  child: ListGroupComponent(
+                    groups: groups,
+                    onTap: (Map<String, dynamic> group) async {
+                      openGroup(context, group);
+
+                      _pageController.animateToPage(
+                        1,
+                        duration: const Duration(
+                          milliseconds: 300,
+                        ),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
                 );
               },
             ),
-            const MobileChatScreen(),
+            kIsWeb
+                ? const MobileChatScreen()
+                : const SafeArea(
+                    child: MobileChatScreen(),
+                  ),
           ],
         ),
       ),
