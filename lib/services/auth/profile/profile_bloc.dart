@@ -1,5 +1,6 @@
 // ignore: depend_on_referenced_packages
 import "package:bloc/bloc.dart";
+import "package:com_nicodevelop_dotmessenger/models/user_model.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/profile_repository.dart";
 import "package:equatable/equatable.dart";
 import "package:firebase_auth/firebase_auth.dart";
@@ -16,7 +17,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<OnProfileEvent>((event, emit) async {
       emit(ProfileLoadingState());
 
-      final User? user = await profileRepository.user;
+      final UserModel? user = await profileRepository.user;
 
       if (user != null) {
         emit(ProfileSuccessState(

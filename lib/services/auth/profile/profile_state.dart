@@ -12,7 +12,7 @@ class ProfileInitialState extends ProfileState {}
 class ProfileLoadingState extends ProfileState {}
 
 class ProfileSuccessState extends ProfileState {
-  final User user;
+  final UserModel user;
 
   const ProfileSuccessState({
     required this.user,
