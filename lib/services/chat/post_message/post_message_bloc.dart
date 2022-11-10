@@ -26,10 +26,16 @@ class PostMessageBloc extends Bloc<PostMessageEvent, PostMessageState> {
 
         if (postResult["groupId"] != event.data["groupId"]) {
           emit(NewGroupCreatedState(
-            groupId: postResult["groupId"],
+            message: {
+              "uid": postResult["uid"],
+              "message": event.data["message"],
+              "groupId": postResult["groupId"],
+            },
           ));
         } else {
-          emit(PostMessageSuccessState());
+          emit(PostMessageSuccessState(
+            message: postResult,
+          ));
         }
       } on ChatException catch (e) {
         emit(PostMessageFailureState(
