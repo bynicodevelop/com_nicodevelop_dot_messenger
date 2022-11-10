@@ -2,6 +2,8 @@ name: Build Android APK
 
 on:
   push:
+    tags:
+      - 'release/v*'
 
 jobs:
   testing-web:
@@ -20,6 +22,16 @@ jobs:
         with:
           flutter-version: '3.3.7'
           channel: 'stable'
+
+      - uses: olegtarasov/get-tag@v2.1.2
+        id: tagName
+        with:
+          tagRegex: 'release/v([0-9]+.[0-9]+.[0-9]+\+[0-9]+)'
+          tagRegexGroup: 1
+
+      - name: Replace YAML version with tag version
+        run: |
+          echo "Tag used version: "$GIT_TAG_NAME
 
       - name: Cache pub dependencies
         uses: actions/cache@v3
