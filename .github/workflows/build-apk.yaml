@@ -16,12 +16,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.3.7'
@@ -45,23 +39,20 @@ jobs:
         run: |
           mv ${{ steps.firebase_options.outputs.filePath }} lib
 
-      - name: Create local.properties file
-        id: local_properties
-        uses: timheuer/base64-to-file@v1.2
-        with:
-          fileName: "local.properties"
-          encodedString: ${{ secrets.LOCAL_PROPERTIES }}
-
-      - name: Move local.properties to android folder
-        run: |
-          mv ${{ steps.local_properties.outputs.filePath }} android
-
       - name: Download Android keystore
         id: android_keystore
         uses: timheuer/base64-to-file@v1.2
         with:
           fileName: key.jks
           encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+
+      - name: Create local.properties
+        run: |
+          echo "flutter.buildMode=release" > android/local.properties
+          echo "flutter.versionName=1.0.0" >> android/local.properties
+          echo "flutter.versionCode=1" >> android/local.properties
+          echo "flutter.minSdkVersion=21" >> android/local.properties
+          echo "flutter.targetSdkVersion=30" >> android/local.properties
 
       - name: Create key.properties
         run: |
