@@ -13,33 +13,36 @@ class MobileChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ChatScaffoldComponent(
-        messages: const ChatMessageComponent(),
-        editor: BlocBuilder<OpenGroupBloc, OpenGroupState>(
-          builder: (context, state) {
-            final Map<String, dynamic> group =
-                (state as OpenChatInitialState).group;
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: ChatScaffoldComponent(
+          messages: const ChatMessageComponent(),
+          editor: BlocBuilder<OpenGroupBloc, OpenGroupState>(
+            builder: (context, state) {
+              final Map<String, dynamic> group =
+                  (state as OpenChatInitialState).group;
 
-            return BlocListener<PostMessageBloc, PostMessageState>(
-              listener: (context, state) {
-                if (state is NewGroupCreatedState) {
-                  openGroup(context, {
-                    ...group,
-                    "uid": state.groupId,
-                  });
-                }
-              },
-              child: MessageEditorComponent(
-                onSend: (message) {
-                  sendMessage(
-                    context,
-                    group,
-                    message,
-                  );
+              return BlocListener<PostMessageBloc, PostMessageState>(
+                listener: (context, state) {
+                  if (state is NewGroupCreatedState) {
+                    openGroup(context, {
+                      ...group,
+                      "uid": state.groupId,
+                    });
+                  }
                 },
-              ),
-            );
-          },
+                child: MessageEditorComponent(
+                  onSend: (message) {
+                    sendMessage(
+                      context,
+                      group,
+                      message,
+                    );
+                  },
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
