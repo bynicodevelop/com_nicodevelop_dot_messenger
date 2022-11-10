@@ -52,14 +52,6 @@ jobs:
           echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
 
-      - name: Create local.properties
-        run: |
-          echo "flutter.buildMode=release" > android/local.properties
-          echo "flutter.versionName=1.0.0" > android/local.properties
-          echo "flutter.versionCode=1" >> android/local.properties
-          echo "flutter.minSdkVersion=21" >> android/local.properties
-          echo "flutter.targetSdkVersion=30" >> android/local.properties
-
       - name: Clean flutter
         run: flutter clean
 

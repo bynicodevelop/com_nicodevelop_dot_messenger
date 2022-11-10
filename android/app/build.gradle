@@ -53,8 +53,8 @@ android {
 
     defaultConfig {
         applicationId "com.dotmessenger.app"
-        minSdkVersion localProperties.getProperty('flutter.minSdkVersion').toInteger()
-        targetSdkVersion localProperties.getProperty('flutter.targetSdkVersion').toInteger()
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
