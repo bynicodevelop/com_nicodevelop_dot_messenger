@@ -45,18 +45,23 @@ jobs:
         run: |
           mv ${{ steps.firebase_options.outputs.filePath }} lib
 
+      - name: Create local.properties file
+        id: local_properties
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: "local.properties"
+          encodedString: ${{ secrets.LOCAL_PROPERTIES }}
+
+      - name: Move local.properties to android folder
+        run: |
+          mv ${{ steps.local_properties.outputs.filePath }} android
+
       - name: Create key.properties
         run: |
           echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
           echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
           echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
-
-      - name: Clean flutter
-        run: flutter clean
-
-      - name: Download pub dependencies
-        run: flutter pub get
 
       - name: Create google-services.json
         id: google_services
@@ -69,6 +74,12 @@ jobs:
         run: |
           mv ${{ steps.google_services.outputs.filePath }} android/app/google-services.json
       
+      - name: Clean flutter
+        run: flutter clean
+
+      - name: Download pub dependencies
+        run: flutter pub get
+
       - name: Build Android App Bundle
         run: flutter build appbundle --release
 
