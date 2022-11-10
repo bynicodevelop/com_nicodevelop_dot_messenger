@@ -8,6 +8,8 @@ import "package:com_nicodevelop_dotmessenger/utils/notice.dart";
 import "package:flutter/services.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter/material.dart";
+import "package:validators/sanitizers.dart";
+import "package:validators/validators.dart";
 
 class ValidateAccountScreen extends StatefulWidget {
   const ValidateAccountScreen({super.key});
@@ -33,24 +35,28 @@ class _ValidateAccountScreenState extends State<ValidateAccountScreen> {
   void initState() {
     super.initState();
 
-    // ignore: discarded_futures
-    FlutterClipboard.paste().then((value) {
-      if (value.length == 4) {
-        _controller0.text = value[0];
-        _controller1.text = value[1];
-        _controller2.text = value[2];
-        _controller3.text = value[3];
+    _focusNode0.addListener(() {
+      if (_focusNode0.hasFocus) {
+        // ignore: discarded_futures
+        FlutterClipboard.paste().then((value) {
+          if (trim(value).length == 4 && isNumeric(value)) {
+            _controller0.text = value[0];
+            _controller1.text = value[1];
+            _controller2.text = value[2];
+            _controller3.text = value[3];
 
-        _focusNode3.unfocus();
+            _focusNode3.unfocus();
 
-        context.read<ValidateAccountBloc>().add(
-              OnValidateAccountEvent(
-                _controller0.text +
-                    _controller1.text +
-                    _controller2.text +
-                    _controller3.text,
-              ),
-            );
+            context.read<ValidateAccountBloc>().add(
+                  OnValidateAccountEvent(
+                    _controller0.text +
+                        _controller1.text +
+                        _controller2.text +
+                        _controller3.text,
+                  ),
+                );
+          }
+        });
       }
     });
   }
@@ -80,7 +86,6 @@ class _ValidateAccountScreenState extends State<ValidateAccountScreen> {
     return SizedBox(
       width: 50,
       child: TextFormField(
-        autofocus: true,
         controller: controller,
         focusNode: focusNode,
         decoration: const InputDecoration(
