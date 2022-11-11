@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - 'release/v*'
+      - 'release/android/v*'
 
 jobs:
   testing-web:
