@@ -1,9 +1,7 @@
 # Dot Messenger
 
-## Build Android App
+Code coverage main : 
+[![codecov main](https://codecov.io/gh/andrewdotn/dot-messenger/branch/main/graph/badge.svg)](https://codecov.io/gh/andrewdotn/dot-messenger)
 
-Générer le fichier keystore
-
-```bash
-keytool -genkey -v -keystore ~/upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
-```
+Code coverage develop : 
+[![codecov develop](https://codecov.io/gh/andrewdotn/dot-messenger/branch/develop/graph/badge.svg)](https://codecov.io/gh/andrewdotn/dot-messenger)
