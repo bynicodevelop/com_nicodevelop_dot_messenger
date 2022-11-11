@@ -4,6 +4,7 @@ import "package:com_nicodevelop_dotmessenger/components/chat_scaffold_component.
 import "package:com_nicodevelop_dotmessenger/components/list_group_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/left_column_constrained_box_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/message_editor_component.dart";
+import "package:com_nicodevelop_dotmessenger/components/skeletons/groups_skeletons_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/validate_account_component.dart";
 import "package:com_nicodevelop_dotmessenger/services/chat/post_message/post_message_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
@@ -30,22 +31,25 @@ class TabletHomeScreen extends StatelessWidget {
                     final List<Map<String, dynamic>> groups =
                         (state as ListGroupInitialState).groups;
 
-                    if (groups.isEmpty) {
+                    if (groups.isEmpty && !state.loading) {
                       return const Center(
                         child: Text("Aucune discussion"),
                       );
                     }
 
-                    return ListGroupComponent(
-                      groups: groups,
-                      onInit: () {
-                        info("Select first group from the list");
+                    return GroupSkeletonsComponent(
+                      isLoading: state.loading,
+                      child: ListGroupComponent(
+                        groups: groups,
+                        onInit: () {
+                          info("Select first group from the list");
 
-                        openGroup(context, groups[0]);
-                      },
-                      onTap: (Map<String, dynamic> group) {
-                        openGroup(context, group);
-                      },
+                          openGroup(context, groups[0]);
+                        },
+                        onTap: (Map<String, dynamic> group) {
+                          openGroup(context, group);
+                        },
+                      ),
                     );
                   },
                 ),
