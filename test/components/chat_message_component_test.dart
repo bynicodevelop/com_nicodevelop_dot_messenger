@@ -2,6 +2,7 @@ import "package:com_nicodevelop_dotmessenger/components/chat_message_component.d
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/chat_repository.dart";
 import "package:com_nicodevelop_dotmessenger/services/chat/load_messages/load_messages_bloc.dart";
+import "package:com_nicodevelop_dotmessenger/services/chat/post_message/post_message_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/widgets/bubble_widget.dart";
 import "package:flutter/material.dart";
@@ -34,6 +35,10 @@ void main() {
       chatRepository,
     );
 
+    final PostMessageBloc postMessageBloc = PostMessageBloc(
+      chatRepository,
+    );
+
     ResponsiveComponent.device = DeviceEnum.mobile;
 
     await tester.pumpWidget(
@@ -46,6 +51,9 @@ void main() {
               ),
               BlocProvider<LoadMessagesBloc>(
                 create: (context) => loadMessagesBloc,
+              ),
+              BlocProvider<PostMessageBloc>(
+                create: (context) => postMessageBloc,
               ),
             ],
             child: Builder(builder: (context) {
@@ -97,6 +105,10 @@ void main() {
       chatRepository,
     );
 
+    final PostMessageBloc postMessageBloc = PostMessageBloc(
+      chatRepository,
+    );
+
     ResponsiveComponent.device = DeviceEnum.mobile;
 
     await tester.pumpWidget(
@@ -109,6 +121,9 @@ void main() {
               ),
               BlocProvider<LoadMessagesBloc>(
                 create: (context) => loadMessagesBloc,
+              ),
+              BlocProvider<PostMessageBloc>(
+                create: (context) => postMessageBloc,
               ),
             ],
             child: Builder(builder: (context) {

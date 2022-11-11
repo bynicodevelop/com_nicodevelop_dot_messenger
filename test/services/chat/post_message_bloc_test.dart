@@ -22,6 +22,8 @@ void main() {
         "recipient": {},
       })).thenAnswer((_) async => {
             "groupId": "1",
+            "message": "Hello world",
+            "uid": "1",
           });
 
       return PostMessageBloc(chatRepository);
@@ -35,7 +37,13 @@ void main() {
     },
     expect: () => [
       PostMessageLoadingState(),
-      PostMessageSuccessState(),
+      const PostMessageSuccessState(
+        message: {
+          "groupId": "1",
+          "message": "Hello world",
+          "uid": "1",
+        },
+      ),
     ],
   );
 
@@ -50,6 +58,8 @@ void main() {
         "recipient": {},
         "groupId": "",
       })).thenAnswer((_) async => {
+            "uid": "1",
+            "message": "New Hello world",
             "groupId": "1",
           });
 
@@ -65,7 +75,11 @@ void main() {
     expect: () => [
       PostMessageLoadingState(),
       const NewGroupCreatedState(
-        groupId: "1",
+        message: {
+          "uid": "1",
+          "message": "New Hello world",
+          "groupId": "1",
+        },
       ),
     ],
   );

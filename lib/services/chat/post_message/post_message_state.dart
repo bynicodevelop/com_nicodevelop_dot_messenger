@@ -11,18 +11,29 @@ class PostMessageInitialState extends PostMessageState {}
 
 class PostMessageLoadingState extends PostMessageState {}
 
-class PostMessageSuccessState extends PostMessageState {}
+class PostMessageSuccessState extends PostMessageState {
+  final Map<String, dynamic> message;
 
-class NewGroupCreatedState extends PostMessageState {
-  final String groupId;
-
-  const NewGroupCreatedState({
-    required this.groupId,
+  const PostMessageSuccessState({
+    required this.message,
   });
 
   @override
   List<Object> get props => [
-        groupId,
+        message,
+      ];
+}
+
+class NewGroupCreatedState extends PostMessageState {
+  final Map<String, dynamic> message;
+
+  const NewGroupCreatedState({
+    required this.message,
+  });
+
+  @override
+  List<Object> get props => [
+        message,
       ];
 }
 
