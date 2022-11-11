@@ -90,7 +90,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: ResponsiveComponent.device == DeviceEnum.mobile ? AppBar() : null,
       body: Padding(
         padding: EdgeInsets.only(
           top: 20.0,
