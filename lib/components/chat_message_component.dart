@@ -1,6 +1,7 @@
 import "package:com_nicodevelop_dotmessenger/components/bubble_event_wrapper_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
 import "package:com_nicodevelop_dotmessenger/services/chat/load_messages/load_messages_bloc.dart";
+import "package:com_nicodevelop_dotmessenger/services/chat/post_message/post_message_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/widgets/bubble_widget.dart";
 import "package:flutter/foundation.dart";
@@ -47,26 +48,45 @@ class _ChatMessageComponentState extends State<ChatMessageComponent> {
             final List<Map<String, dynamic>> messages =
                 (state as LoadMessagesInitialState).messages;
 
-            return ListView.builder(
-              padding: EdgeInsets.only(
-                top: kIsWeb ? 90 : 5,
-                left:
-                    ResponsiveComponent.device != DeviceEnum.mobile ? 50 : 10.0,
-                right:
-                    ResponsiveComponent.device != DeviceEnum.mobile ? 50 : 10.0,
-              ),
-              reverse: true,
-              controller: _scrollController,
-              shrinkWrap: true,
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                return BubbleEventWrapperComponent(
-                  message: messages[index],
-                  builder: (context, message) {
-                    return BubbleWidget(
-                      message: message["message"],
-                      isMe: message["isMe"],
-                      deletedAt: message["deleted_at"],
+            return BlocBuilder<PostMessageBloc, PostMessageState>(
+              builder: (context, state) {
+                /**
+                 * Permet filtrer les messages en fonction de l'uid du message
+                 * Permettre d'avoir une liste unique
+                 * Surtout après la création d'un message
+                 * Permet d'avoir le message à l'écran plus rapidement
+                 */
+                if (state is PostMessageSuccessState) {
+                  if (!messages.any(
+                      (message) => message["uid"] == state.message["uid"])) {
+                    messages.add(state.message);
+                  }
+                }
+
+                return ListView.builder(
+                  padding: EdgeInsets.only(
+                    top: kIsWeb ? 90 : 5,
+                    left: ResponsiveComponent.device != DeviceEnum.mobile
+                        ? 50
+                        : 10.0,
+                    right: ResponsiveComponent.device != DeviceEnum.mobile
+                        ? 50
+                        : 10.0,
+                  ),
+                  reverse: true,
+                  controller: _scrollController,
+                  shrinkWrap: true,
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    return BubbleEventWrapperComponent(
+                      message: messages[index],
+                      builder: (context, message) {
+                        return BubbleWidget(
+                          message: message["message"],
+                          isMe: message["isMe"],
+                          deletedAt: message["deleted_at"],
+                        );
+                      },
                     );
                   },
                 );

@@ -27,7 +27,7 @@ class MobileChatScreen extends StatelessWidget {
                   if (state is NewGroupCreatedState) {
                     openGroup(context, {
                       ...group,
-                      "uid": state.groupId,
+                      "uid": state.message["groupId"],
                     });
                   }
                 },

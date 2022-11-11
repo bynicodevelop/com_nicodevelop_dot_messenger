@@ -1,0 +1,104 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'release/android/v*'
+
+jobs:
+  testing-web:
+    uses: bynicodevelop/com_nicodevelop_dot_messenger/.github/workflows/tests.yaml@main
+
+  build-apk:
+    needs: [testing-web]
+    name: Build APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.3.7'
+          channel: 'stable'
+
+      - uses: olegtarasov/get-tag@v2.1.2
+        id: tagName
+        with:
+          tagRegex: 'release/v([0-9]+.[0-9]+.[0-9]+\+[0-9]+)'
+          tagRegexGroup: 1
+
+      - name: Replace YAML version with tag version
+        run: |
+          sed -i 's/99.99.99+99/'$GIT_TAG_NAME'/g' pubspec.yaml|
+          echo "Tag used version: "$GIT_TAG_NAME
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.FLUTTER_HOME }}/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Create firebase_options.dart file
+        id: firebase_options
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: "firebase_options.dart"
+          encodedString: ${{ secrets.FIREBASE_OPTIONS }}
+
+      - name: Move firebase_options.dart to lib folder
+        run: |
+          mv ${{ steps.firebase_options.outputs.filePath }} lib
+
+      - name: Download Android keystore
+        id: android_keystore
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: key.jks
+          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+
+      - name: Create local.properties
+        run: |
+          echo "flutter.buildMode=release" > android/local.properties
+          echo "flutter.minSdkVersion=${{ secrets.MIN_SDK_VERSION }}" >> android/local.properties
+          echo "flutter.targetSdkVersion=${{ secrets.TARGET_SDK_VERSION }}" >> android/local.properties
+
+      - name: Create key.properties
+        run: |
+          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+
+      - name: Create google-services.json
+        id: google_services
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: "google-services.json"
+          encodedString: ${{ secrets.GOOGLE_SERVICES_PRODUCTION_DEV }}
+
+      - name: Show google-services.json file
+        run: |
+          mv ${{ steps.google_services.outputs.filePath }} android/app/google-services.json
+      
+      - name: Clean flutter
+        run: flutter clean
+
+      - name: Download pub dependencies
+        run: flutter pub get
+
+      - name: Build Android App Bundle
+        run: flutter build appbundle --release
+
+      - name: "Clean releases"
+        uses: glassechidna/artifact-cleaner@master
+        with:
+          minimumAge: 86400
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: release
+          path: build/app/outputs/bundle/release/app-release.aab

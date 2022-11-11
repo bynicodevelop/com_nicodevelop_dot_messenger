@@ -123,7 +123,7 @@ class ChatRepository {
       });
     }
 
-    await firestore
+    DocumentReference<Map<String, dynamic>> message = await firestore
         .collection("groups")
         .doc(data["groupId"])
         .collection("messages")
@@ -133,7 +133,11 @@ class ChatRepository {
     });
 
     return {
+      "uid": message.id,
       "groupId": data["groupId"],
+      "message": data["message"],
+      "sender": user.uid,
+      "createdAt": DateTime.now().millisecondsSinceEpoch,
     };
   }
 }
