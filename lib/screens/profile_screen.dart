@@ -60,8 +60,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
           },
           child: BlocBuilder<ProfileBloc, ProfileState>(
+            bloc: context.read<ProfileBloc>()..add(OnProfileEvent()),
             builder: (context, state) {
-              UserModel? user = (state as ProfileSuccessState).user;
+              if (state is! ProfileSuccessState) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              UserModel? user = state.user;
 
               _displayNameController.text = user.displayName;
               _emailController.text = user.email;
