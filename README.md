@@ -15,3 +15,7 @@ git tag -a release/android/v1.0.0+1 -m "Commit message"
 ```bash
 git tag -a release/web/v1.0.0+1 -m "Commit message"
 ```
+
+## Report a bug
+
+If you find a bug, please report it [here](https://github.com/bynicodevelop/com_nicodevelop_dot_messenger/issues).
