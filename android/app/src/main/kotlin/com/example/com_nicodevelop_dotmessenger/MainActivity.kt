@@ -1,4 +1,4 @@
-package com.dotmessenger.app
+package com.dotmessenger.mobile
 
 import io.flutter.embedding.android.FlutterActivity
 

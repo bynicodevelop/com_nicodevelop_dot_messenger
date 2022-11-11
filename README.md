@@ -1,10 +1,8 @@
 # Dot Messenger
 
-Code coverage main : 
-[![codecov main](https://codecov.io/gh/andrewdotn/dot-messenger/branch/main/graph/badge.svg)](https://codecov.io/gh/andrewdotn/dot-messenger)
+Code coverage main :
 
-Code coverage develop : 
-[![codecov develop](https://codecov.io/gh/andrewdotn/dot-messenger/branch/develop/graph/badge.svg)](https://codecov.io/gh/andrewdotn/dot-messenger)
+[![codecov](https://codecov.io/gh/bynicodevelop/com_nicodevelop_dot_messenger/branch/main/graph/badge.svg?token=LT1D00JH4T)](https://codecov.io/gh/bynicodevelop/com_nicodevelop_dot_messenger)
 
 ## Build Release Android
 
