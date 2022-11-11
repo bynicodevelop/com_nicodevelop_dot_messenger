@@ -32,8 +32,9 @@ jobs:
 
       - name: Replace YAML version with tag version
         run: |
-          sed -i 's/99.99.99+99/'$GIT_TAG_NAME'/g' pubspec.yaml|
+          sed -i sed -i 's/[0-9]+.[0-9]+.[0-9]+\+[0-9]+/'$GIT_TAG_NAME'/' pubspec.yaml
           echo "Tag used version: "$GIT_TAG_NAME
+          cat pubspec.yaml
 
       - name: Cache pub dependencies
         uses: actions/cache@v3
