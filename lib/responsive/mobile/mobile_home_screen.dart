@@ -52,13 +52,7 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
             BlocBuilder<ListGroupBloc, ListGroupState>(
               builder: (context, state) {
                 final List<Map<String, dynamic>> groups =
-                    (state as ListGroupInitialState).groups;
-
-                if (groups.isEmpty) {
-                  return const Center(
-                    child: Text("Aucune discussion"),
-                  );
-                }
+                    (state as ListGroupInitialState).results;
 
                 if (kIsWeb) {
                   return ListGroupComponent(

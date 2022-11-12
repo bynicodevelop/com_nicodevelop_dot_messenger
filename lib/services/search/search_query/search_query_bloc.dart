@@ -2,6 +2,7 @@
 import "package:bloc/bloc.dart";
 import "package:com_nicodevelop_dotmessenger/exceptions/search_exception.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/search_repository.dart";
+import "package:com_nicodevelop_dotmessenger/services/generic_state.dart";
 import "package:equatable/equatable.dart";
 
 part "search_query_event.dart";
@@ -23,7 +24,7 @@ class SearchQueryBloc extends Bloc<SearchQueryEvent, SearchQueryState> {
         });
 
         emit(SearchQuerySuccessState(
-          result: result,
+          results: result,
         ));
       } on SearchException catch (e) {
         emit(SearchQueryFailureState(

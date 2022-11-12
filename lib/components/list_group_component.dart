@@ -1,4 +1,6 @@
+import "package:com_nicodevelop_dotmessenger/components/empty_wrapper_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
+import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
 import "package:com_nicodevelop_dotmessenger/widgets/item_group_widget.dart";
 import "package:flutter/foundation.dart";
@@ -33,35 +35,32 @@ class _ListGroupComponentState extends State<ListGroupComponent> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.groups.isEmpty) {
-      return const Center(
-        child: Text("Vous n'avez pas de messages"),
-      );
-    }
+    return EmptyWrapperComponent<ListGroupBloc, ListGroupState>(
+      message: "Aucun groupe",
+      child: ListView.builder(
+        padding: ResponsiveComponent.device == DeviceEnum.mobile
+            ? const EdgeInsets.only(
+                top: kIsWeb ? 90 : 5,
+              )
+            : null,
+        itemCount: widget.groups.length,
+        itemBuilder: (BuildContext context, int index) {
+          final Map<String, dynamic> group = widget.groups[index];
 
-    return ListView.builder(
-      padding: ResponsiveComponent.device == DeviceEnum.mobile
-          ? const EdgeInsets.only(
-              top: kIsWeb ? 90 : 5,
-            )
-          : null,
-      itemCount: widget.groups.length,
-      itemBuilder: (BuildContext context, int index) {
-        final Map<String, dynamic> group = widget.groups[index];
+          final Map<String, dynamic> user = excludeCurrentUser(
+            group["users"],
+          );
 
-        final Map<String, dynamic> user = excludeCurrentUser(
-          group["users"],
-        );
-
-        return ItemGroupWidget(
-          onTap: () => widget.onTap != null ? widget.onTap!(group) : null,
-          avatarUrl: user["photoUrl"],
-          displayName: user["displayName"],
-          lastMessage: widget.groups[index]["lastMessage"],
-          lastMessageTime: widget.groups[index]["lastMessageTime"],
-          isReaded: false, // widget.groups[index]["isReaded"] ?? false,
-        );
-      },
+          return ItemGroupWidget(
+            onTap: () => widget.onTap != null ? widget.onTap!(group) : null,
+            avatarUrl: user["photoUrl"],
+            displayName: user["displayName"],
+            lastMessage: widget.groups[index]["lastMessage"],
+            lastMessageTime: widget.groups[index]["lastMessageTime"],
+            isReaded: false, // widget.groups[index]["isReaded"] ?? false,
+          );
+        },
+      ),
     );
   }
 }

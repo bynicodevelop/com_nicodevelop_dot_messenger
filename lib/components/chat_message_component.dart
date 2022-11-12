@@ -25,12 +25,6 @@ class _ChatMessageComponentState extends State<ChatMessageComponent> {
         final Map<String, dynamic> group =
             (state as OpenChatInitialState).group;
 
-        if (group.isEmpty) {
-          return const Center(
-            child: Text("Aucun groupe"),
-          );
-        }
-
         if (!group.containsKey("uid") ||
             group["uid"] == null ||
             group["uid"].isEmpty) {

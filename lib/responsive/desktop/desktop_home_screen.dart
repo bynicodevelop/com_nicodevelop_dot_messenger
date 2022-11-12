@@ -26,19 +26,15 @@ class DesktopHomeScreen extends StatelessWidget {
                 child: BlocBuilder<ListGroupBloc, ListGroupState>(
                   builder: (context, state) {
                     final List<Map<String, dynamic>> groups =
-                        (state as ListGroupInitialState).groups;
-
-                    if (groups.isEmpty) {
-                      return const Center(
-                        child: Text("No groups"),
-                      );
-                    }
+                        (state as ListGroupInitialState).results;
 
                     return ListGroupComponent(
-                      onInit: () => openGroup(
-                        context,
-                        groups[0],
-                      ),
+                      onInit: () => groups.isEmpty
+                          ? null
+                          : openGroup(
+                              context,
+                              groups[0],
+                            ),
                       groups: groups,
                       onTap: (group) => openGroup(
                         context,

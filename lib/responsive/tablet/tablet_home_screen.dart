@@ -9,7 +9,6 @@ import "package:com_nicodevelop_dotmessenger/services/chat/post_message/post_mes
 import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
-import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
 import "package:com_nicodevelop_dotmessenger/utils/notice.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter/material.dart";
@@ -28,21 +27,16 @@ class TabletHomeScreen extends StatelessWidget {
                 child: BlocBuilder<ListGroupBloc, ListGroupState>(
                   builder: (context, state) {
                     final List<Map<String, dynamic>> groups =
-                        (state as ListGroupInitialState).groups;
-
-                    if (groups.isEmpty) {
-                      return const Center(
-                        child: Text("Aucune discussion"),
-                      );
-                    }
+                        (state as ListGroupInitialState).results;
 
                     return ListGroupComponent(
                       groups: groups,
-                      onInit: () {
-                        info("Select first group from the list");
-
-                        openGroup(context, groups[0]);
-                      },
+                      onInit: () => groups.isEmpty
+                          ? null
+                          : openGroup(
+                              context,
+                              groups[0],
+                            ),
                       onTap: (Map<String, dynamic> group) {
                         openGroup(context, group);
                       },

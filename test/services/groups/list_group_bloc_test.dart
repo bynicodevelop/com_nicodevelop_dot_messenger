@@ -27,7 +27,7 @@ void main() {
       expect: () => [
         const ListGroupInitialState(
           loading: true,
-          groups: [],
+          results: [],
         ),
       ],
       verify: (bloc) async => verify(groupRepository.load()).called(1),
@@ -54,7 +54,7 @@ void main() {
       expect: () => [
         const ListGroupInitialState(
           loading: false,
-          groups: [],
+          results: [],
         ),
       ],
     );
@@ -81,7 +81,7 @@ void main() {
       expect: () => [
         const ListGroupInitialState(
           loading: false,
-          groups: [
+          results: [
             {
               "uid": "uid",
               "photoUrl": "https://placekitten.com/250/250?img=1",
