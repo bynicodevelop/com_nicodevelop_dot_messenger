@@ -7,18 +7,20 @@ abstract class ListGroupState extends Equatable {
   List<Object> get props => [];
 }
 
-class ListGroupInitialState extends ListGroupState {
+class ListGroupInitialState extends ListGroupState
+    implements GenericLoadedState {
   final bool loading;
-  final List<Map<String, dynamic>> groups;
+  @override
+  final List<Map<String, dynamic>> results;
 
   const ListGroupInitialState({
     this.loading = true,
-    this.groups = const [],
+    this.results = const [],
   });
 
   @override
   List<Object> get props => [
-        groups,
+        results,
         loading,
       ];
 }

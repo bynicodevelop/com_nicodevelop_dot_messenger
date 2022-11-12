@@ -1,6 +1,7 @@
 // ignore: depend_on_referenced_packages
 import "package:bloc/bloc.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/group_repository.dart";
+import "package:com_nicodevelop_dotmessenger/services/generic_state.dart";
 import "package:equatable/equatable.dart";
 
 part "list_group_event.dart";
@@ -17,14 +18,14 @@ class ListGroupBloc extends Bloc<ListGroupEvent, ListGroupState> {
     on<OnLoadedListGroupEvent>((event, emit) async {
       emit(ListGroupInitialState(
         loading: false,
-        groups: event.groups,
+        results: event.groups,
       ));
     });
 
     on<OnLoadListGroupEvent>((event, emit) async {
       emit(ListGroupInitialState(
         loading: true,
-        groups: (state as ListGroupInitialState).groups,
+        results: (state as ListGroupInitialState).results,
       ));
 
       await groupRepository.load();

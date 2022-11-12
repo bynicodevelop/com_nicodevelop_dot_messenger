@@ -27,7 +27,7 @@ class DesktopHomeScreen extends StatelessWidget {
                 child: BlocBuilder<ListGroupBloc, ListGroupState>(
                   builder: (context, state) {
                     final List<Map<String, dynamic>> groups =
-                        (state as ListGroupInitialState).groups;
+                        (state as ListGroupInitialState).results;
 
                     if (groups.isEmpty && !state.loading) {
                       return const Center(
