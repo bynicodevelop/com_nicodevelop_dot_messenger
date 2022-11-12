@@ -10,6 +10,7 @@ import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_gro
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
 import "package:com_nicodevelop_dotmessenger/utils/notice.dart";
+import "package:com_nicodevelop_dotmessenger/widgets/selected_discussion_wrapper_widget.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter/material.dart";
 
@@ -51,42 +52,44 @@ class TabletHomeScreen extends StatelessWidget {
                     final Map<String, dynamic> group =
                         (state as OpenChatInitialState).group;
 
-                    if (group.isEmpty) {
-                      return const Center(
-                        child: Text("Selectionnez une discussion"),
-                      );
-                    }
+                    return SelectedDiscussionWrapperWidget(
+                      group: group,
+                      child: Builder(
+                        builder: (context) {
+                          final Map<String, dynamic> user = excludeCurrentUser(
+                            group["users"],
+                          );
 
-                    final Map<String, dynamic> user = excludeCurrentUser(
-                      group["users"],
-                    );
-
-                    return ChatScaffoldComponent(
-                      heading: ChatHeadingBarComponent(
-                        profile: {
-                          "displayName": user["displayName"],
-                          "photoUrl": user["photoUrl"],
+                          return ChatScaffoldComponent(
+                            heading: ChatHeadingBarComponent(
+                              profile: {
+                                "displayName": user["displayName"],
+                                "photoUrl": user["photoUrl"],
+                              },
+                            ),
+                            messages: const ChatMessageComponent(),
+                            editor:
+                                BlocListener<PostMessageBloc, PostMessageState>(
+                              listener: (context, state) {
+                                if (state is PostMessageFailureState) {
+                                  return notice(
+                                    context,
+                                    state.code,
+                                  );
+                                }
+                              },
+                              child: MessageEditorComponent(
+                                onSend: (message) {
+                                  sendMessage(
+                                    context,
+                                    group,
+                                    message,
+                                  );
+                                },
+                              ),
+                            ),
+                          );
                         },
-                      ),
-                      messages: const ChatMessageComponent(),
-                      editor: BlocListener<PostMessageBloc, PostMessageState>(
-                        listener: (context, state) {
-                          if (state is PostMessageFailureState) {
-                            return notice(
-                              context,
-                              state.code,
-                            );
-                          }
-                        },
-                        child: MessageEditorComponent(
-                          onSend: (message) {
-                            sendMessage(
-                              context,
-                              group,
-                              message,
-                            );
-                          },
-                        ),
                       ),
                     );
                   },

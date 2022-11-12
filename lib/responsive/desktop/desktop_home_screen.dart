@@ -8,6 +8,7 @@ import "package:com_nicodevelop_dotmessenger/components/validate_account_compone
 import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
+import "package:com_nicodevelop_dotmessenger/widgets/selected_discussion_wrapper_widget.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 
@@ -46,24 +47,35 @@ class DesktopHomeScreen extends StatelessWidget {
               ),
               Expanded(
                 flex: 4,
-                child: ChatScaffoldComponent(
-                  messages: const ChatMessageComponent(),
-                  editor: BlocBuilder<OpenGroupBloc, OpenGroupState>(
-                    builder: (context, state) {
-                      final Map<String, dynamic> group =
-                          (state as OpenChatInitialState).group;
+                child: BlocBuilder<OpenGroupBloc, OpenGroupState>(
+                  builder: (context, state) {
+                    final Map<String, dynamic> group =
+                        (state as OpenChatInitialState).group;
 
-                      return MessageEditorComponent(
-                        onSend: (message) {
-                          sendMessage(
-                            context,
-                            group,
-                            message,
+                    return SelectedDiscussionWrapperWidget(
+                      group: group,
+                      child: Builder(
+                        builder: (context) {
+                          return ChatScaffoldComponent(
+                            messages: const ChatMessageComponent(),
+                            editor: Builder(
+                              builder: (context) {
+                                return MessageEditorComponent(
+                                  onSend: (message) {
+                                    sendMessage(
+                                      context,
+                                      group,
+                                      message,
+                                    );
+                                  },
+                                );
+                              },
+                            ),
                           );
                         },
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
               Expanded(
