@@ -47,6 +47,7 @@ class LoadMessagesBloc extends Bloc<LoadMessagesEvent, LoadMessagesState> {
         );
       }
     });
+
     on<OnLoadedMessagesEvent>((event, emit) async {
       emit(LoadMessagesInitialState(
         loading: false,

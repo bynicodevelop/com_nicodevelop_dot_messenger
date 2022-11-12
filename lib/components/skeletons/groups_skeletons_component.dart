@@ -108,7 +108,7 @@ class GroupSkeletonsComponent extends StatelessWidget {
             )
           : null,
       children: [
-        for (var i = 0; i < 10; i++) _loadingGroupItem(context),
+        for (var i = 0; i < 5; i++) _loadingGroupItem(context),
       ],
     );
   }

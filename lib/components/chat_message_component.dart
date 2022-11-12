@@ -7,6 +7,7 @@ import "package:com_nicodevelop_dotmessenger/widgets/bubble_widget.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
+import "package:skeletons/skeletons.dart";
 
 class ChatMessageComponent extends StatefulWidget {
   const ChatMessageComponent({super.key});
@@ -17,6 +18,73 @@ class ChatMessageComponent extends StatefulWidget {
 
 class _ChatMessageComponentState extends State<ChatMessageComponent> {
   final ScrollController _scrollController = ScrollController();
+
+  Widget _bubbleSkeleton(
+    BuildContext context,
+    bool isMe,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        bottom: 24.0,
+      ),
+      child: Row(
+        mainAxisAlignment:
+            isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+        children: [
+          Column(
+            crossAxisAlignment:
+                isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            children: [
+              SkeletonLine(
+                style: SkeletonLineStyle(
+                  height: 16,
+                  width: ResponsiveComponent.device == DeviceEnum.mobile
+                      ? MediaQuery.of(context).size.width * 0.5
+                      : MediaQuery.of(context).size.width * 0.3,
+                  padding: EdgeInsets.only(
+                    left: isMe ? 0 : 16.0,
+                    right: isMe ? 16.0 : 0,
+                  ),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SkeletonLine(
+                style: SkeletonLineStyle(
+                  height: 16,
+                  width: MediaQuery.of(context).size.width * 0.2,
+                  padding: EdgeInsets.only(
+                    left: isMe ? 0 : 16.0,
+                    right: isMe ? 16.0 : 0,
+                  ),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _loadingMessages(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.only(
+        top: kIsWeb ? 100 : 5,
+      ),
+      shrinkWrap: true,
+      children: [
+        for (var i = 0; i < 5; i++)
+          _bubbleSkeleton(
+            context,
+            // random bool
+            i % 2 == 0,
+          ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +113,11 @@ class _ChatMessageComponentState extends State<ChatMessageComponent> {
               groupId: group["uid"],
             )),
           builder: (context, state) {
-            final List<Map<String, dynamic>> messages =
-                (state as LoadMessagesInitialState).messages;
+            if ((state as LoadMessagesInitialState).loading) {
+              return _loadingMessages(context);
+            }
+
+            final List<Map<String, dynamic>> messages = (state).messages;
 
             return BlocBuilder<PostMessageBloc, PostMessageState>(
               builder: (context, state) {
