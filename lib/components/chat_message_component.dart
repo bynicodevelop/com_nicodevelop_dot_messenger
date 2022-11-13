@@ -46,7 +46,7 @@ class _ChatMessageComponentState extends State<ChatMessageComponent> {
               child: Builder(
                 builder: (context) {
                   final List<Map<String, dynamic>> messages =
-                      (state as LoadMessagesInitialState).messages;
+                      (state as LoadMessagesInitialState).results;
 
                   if (state.loading) {
                     return const ChatSkeletonComponent();

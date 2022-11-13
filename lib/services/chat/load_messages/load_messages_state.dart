@@ -7,18 +7,21 @@ abstract class LoadMessagesState extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadMessagesInitialState extends LoadMessagesState {
+class LoadMessagesInitialState extends LoadMessagesState
+    implements GenericLoadedState {
   final bool loading;
-  final List<Map<String, dynamic>> messages;
+
+  @override
+  final List<Map<String, dynamic>> results;
 
   const LoadMessagesInitialState({
     this.loading = true,
-    this.messages = const [],
+    this.results = const [],
   });
 
   @override
   List<Object> get props => [
         loading,
-        messages,
+        results,
       ];
 }

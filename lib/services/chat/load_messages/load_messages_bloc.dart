@@ -6,6 +6,8 @@ import "package:com_nicodevelop_dotmessenger/repositories/chat_repository.dart";
 import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
 import "package:equatable/equatable.dart";
 
+import "../../generic_state.dart";
+
 part "load_messages_event.dart";
 part "load_messages_state.dart";
 
@@ -24,7 +26,7 @@ class LoadMessagesBloc extends Bloc<LoadMessagesEvent, LoadMessagesState> {
     on<OnLoadMessagesEvent>((event, emit) async {
       emit(LoadMessagesInitialState(
         loading: true,
-        messages: (state as LoadMessagesInitialState).messages,
+        results: (state as LoadMessagesInitialState).results,
       ));
 
       try {
@@ -51,7 +53,7 @@ class LoadMessagesBloc extends Bloc<LoadMessagesEvent, LoadMessagesState> {
     on<OnLoadedMessagesEvent>((event, emit) async {
       emit(LoadMessagesInitialState(
         loading: false,
-        messages: event.messages,
+        results: event.messages,
       ));
     });
   }
