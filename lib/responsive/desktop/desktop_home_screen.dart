@@ -4,6 +4,7 @@ import "package:com_nicodevelop_dotmessenger/components/chat_scaffold_component.
 import "package:com_nicodevelop_dotmessenger/components/left_column_constrained_box_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/list_group_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/message_editor_component.dart";
+import "package:com_nicodevelop_dotmessenger/components/skeletons/groups_skeletons_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/validate_account_component.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
@@ -29,17 +30,24 @@ class DesktopHomeScreen extends StatelessWidget {
                     final List<Map<String, dynamic>> groups =
                         (state as ListGroupInitialState).results;
 
-                    return ListGroupComponent(
-                      onInit: () => groups.isEmpty
-                          ? null
-                          : openGroup(
-                              context,
-                              groups[0],
-                            ),
-                      groups: groups,
-                      onTap: (group) => openGroup(
-                        context,
-                        group,
+                    if (groups.isEmpty && !state.loading) {
+                      return const Center(
+                        child: Text("No groups"),
+                      );
+                    }
+
+                    return GroupSkeletonsComponent(
+                      isLoading: state.loading,
+                      child: ListGroupComponent(
+                        onInit: () => openGroup(
+                          context,
+                          groups[0],
+                        ),
+                        groups: groups,
+                        onTap: (group) => openGroup(
+                          context,
+                          group,
+                        ),
                       ),
                     );
                   },

@@ -15,15 +15,10 @@ import "package:mockito/mockito.dart";
 import "chat_message_component_test.mocks.dart";
 
 void main() {
-  testWidgets("Doit afficher une liste de passe vide",
+  testWidgets("Doit afficher une liste de message vide",
       (WidgetTester tester) async {
     // ARRANGE
-    late BuildContext ctx;
     final ChatRepository chatRepository = MockChatRepository();
-
-    when(chatRepository.load({
-      "groupId": "groupId",
-    })).thenAnswer((_) async => []);
 
     when(chatRepository.messages).thenAnswer(
       (_) => Stream.value([]),
@@ -57,7 +52,6 @@ void main() {
               ),
             ],
             child: Builder(builder: (context) {
-              ctx = context;
               return const ChatMessageComponent();
             }),
           ),
@@ -68,36 +62,22 @@ void main() {
     // ACT
     await tester.pumpAndSettle();
 
-    ctx.read<OpenGroupBloc>().add(const OnOpenGroupEvent(
-          group: {
-            "uid": "groupId",
-          },
-        ));
+    openGroupBloc.add(const OnOpenGroupEvent(
+      group: {
+        "uid": "groupId",
+      },
+    ));
 
     await tester.pumpAndSettle();
 
     // ASSERT
-    expect(find.byType(BubbleWidget), findsNothing);
+    expect(find.text("No messages found"), findsOneWidget);
   });
 
   testWidgets("Doit afficher une liste de messages",
       (WidgetTester tester) async {
     // ARRANGE
-    late BuildContext ctx;
     final ChatRepository chatRepository = MockChatRepository();
-
-    when(chatRepository.load({
-      "groupId": "groupId",
-    })).thenAnswer((_) async => []);
-
-    when(chatRepository.messages).thenAnswer(
-      (_) => Stream.value([
-        {
-          "message": "message",
-          "isMe": true,
-        },
-      ]),
-    );
 
     final OpenGroupBloc openGroupBloc = OpenGroupBloc();
 
@@ -117,17 +97,23 @@ void main() {
           body: MultiBlocProvider(
             providers: [
               BlocProvider<OpenGroupBloc>(
-                create: (context) => openGroupBloc,
+                create: (context) => openGroupBloc
+                  ..add(const OnOpenGroupEvent(
+                    group: {
+                      "uid": "groupId",
+                    },
+                  )),
               ),
               BlocProvider<LoadMessagesBloc>(
+                lazy: false,
                 create: (context) => loadMessagesBloc,
               ),
               BlocProvider<PostMessageBloc>(
+                lazy: false,
                 create: (context) => postMessageBloc,
               ),
             ],
             child: Builder(builder: (context) {
-              ctx = context;
               return const ChatMessageComponent();
             }),
           ),
@@ -138,11 +124,15 @@ void main() {
     // ACT
     await tester.pumpAndSettle();
 
-    ctx.read<OpenGroupBloc>().add(const OnOpenGroupEvent(
-          group: {
-            "uid": "groupId",
-          },
-        ));
+    loadMessagesBloc.emit(const LoadMessagesInitialState(
+      loading: false,
+      results: [
+        {
+          "message": "message",
+          "isMe": true,
+        },
+      ],
+    ));
 
     await tester.pumpAndSettle();
 
