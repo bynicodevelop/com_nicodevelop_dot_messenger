@@ -1,7 +1,7 @@
 import "package:com_nicodevelop_dotmessenger/components/bubble_event_wrapper_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/empty_wrapper_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
-import "package:com_nicodevelop_dotmessenger/components/skeletons/chat_skeletongs_component.dart";
+import "package:com_nicodevelop_dotmessenger/components/skeletons/chat_skeletons_component.dart";
 import "package:com_nicodevelop_dotmessenger/services/chat/load_messages/load_messages_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/chat/post_message/post_message_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
@@ -41,16 +41,15 @@ class _ChatMessageComponentState extends State<ChatMessageComponent> {
               groupId: group["uid"],
             )),
           builder: (context, state) {
+            if ((state as LoadMessagesInitialState).loading) {
+              return const ChatSkeletonComponent();
+            }
+
             return EmptyWrapperComponent<LoadMessagesBloc, LoadMessagesState>(
               message: "No messages found",
               child: Builder(
                 builder: (context) {
-                  final List<Map<String, dynamic>> messages =
-                      (state as LoadMessagesInitialState).results;
-
-                  if (state.loading) {
-                    return const ChatSkeletonComponent();
-                  }
+                  final List<Map<String, dynamic>> messages = state.results;
 
                   return BlocBuilder<PostMessageBloc, PostMessageState>(
                     builder: (context, state) {
