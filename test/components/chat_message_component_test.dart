@@ -1,5 +1,6 @@
 import "package:com_nicodevelop_dotmessenger/components/chat_message_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
+import "package:com_nicodevelop_dotmessenger/components/skeletons/chat_skeletons_component.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/chat_repository.dart";
 import "package:com_nicodevelop_dotmessenger/services/chat/load_messages/load_messages_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/chat/post_message/post_message_bloc.dart";
@@ -42,7 +43,12 @@ void main() {
           body: MultiBlocProvider(
             providers: [
               BlocProvider<OpenGroupBloc>(
-                create: (context) => openGroupBloc,
+                create: (context) => openGroupBloc
+                  ..add(const OnOpenGroupEvent(
+                    group: {
+                      "uid": "groupId",
+                    },
+                  )),
               ),
               BlocProvider<LoadMessagesBloc>(
                 create: (context) => loadMessagesBloc,
@@ -60,18 +66,72 @@ void main() {
     );
 
     // ACT
-    await tester.pumpAndSettle();
-
-    openGroupBloc.add(const OnOpenGroupEvent(
-      group: {
-        "uid": "groupId",
-      },
-    ));
-
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
 
     // ASSERT
     expect(find.text("No messages found"), findsOneWidget);
+  });
+
+  testWidgets("Doit afficher un status de chargement",
+      (WidgetTester tester) async {
+    // ARRANGE
+    final ChatRepository chatRepository = MockChatRepository();
+
+    when(chatRepository.messages).thenAnswer(
+      (_) => Stream.value([]),
+    );
+
+    final OpenGroupBloc openGroupBloc = OpenGroupBloc();
+
+    final LoadMessagesBloc loadMessagesBloc = LoadMessagesBloc(
+      chatRepository,
+    );
+
+    final PostMessageBloc postMessageBloc = PostMessageBloc(
+      chatRepository,
+    );
+
+    ResponsiveComponent.device = DeviceEnum.mobile;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: MultiBlocProvider(
+            providers: [
+              BlocProvider<OpenGroupBloc>(
+                create: (context) => openGroupBloc
+                  ..add(const OnOpenGroupEvent(
+                    group: {
+                      "uid": "groupId",
+                    },
+                  )),
+              ),
+              BlocProvider<LoadMessagesBloc>(
+                create: (context) => loadMessagesBloc
+                  ..emit(const LoadMessagesInitialState(
+                    loading: true,
+                    results: [],
+                  )),
+              ),
+              BlocProvider<PostMessageBloc>(
+                lazy: false,
+                create: (context) => postMessageBloc,
+              ),
+            ],
+            child: Builder(builder: (context) {
+              return const ChatMessageComponent();
+            }),
+          ),
+        ),
+      ),
+    );
+
+    // ACT
+    await tester.pump(const Duration(seconds: 1));
+
+    // ASSERT
+    expect(find.byType(ChatSkeletonComponent), findsOneWidget);
+    expect(find.byType(BubbleWidget), findsNothing);
   });
 
   testWidgets("Doit afficher une liste de messages",
@@ -105,8 +165,16 @@ void main() {
                   )),
               ),
               BlocProvider<LoadMessagesBloc>(
-                lazy: false,
-                create: (context) => loadMessagesBloc,
+                create: (context) => loadMessagesBloc
+                  ..emit(const LoadMessagesInitialState(
+                    loading: false,
+                    results: [
+                      {
+                        "message": "message",
+                        "isMe": true,
+                      },
+                    ],
+                  )),
               ),
               BlocProvider<PostMessageBloc>(
                 lazy: false,
@@ -122,19 +190,7 @@ void main() {
     );
 
     // ACT
-    await tester.pumpAndSettle();
-
-    loadMessagesBloc.emit(const LoadMessagesInitialState(
-      loading: false,
-      results: [
-        {
-          "message": "message",
-          "isMe": true,
-        },
-      ],
-    ));
-
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
 
     // ASSERT
     expect(find.byType(BubbleWidget), findsWidgets);

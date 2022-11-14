@@ -41,16 +41,15 @@ class _ChatMessageComponentState extends State<ChatMessageComponent> {
               groupId: group["uid"],
             )),
           builder: (context, state) {
+            if ((state as LoadMessagesInitialState).loading) {
+              return const ChatSkeletonComponent();
+            }
+
             return EmptyWrapperComponent<LoadMessagesBloc, LoadMessagesState>(
               message: "No messages found",
               child: Builder(
                 builder: (context) {
-                  final List<Map<String, dynamic>> messages =
-                      (state as LoadMessagesInitialState).results;
-
-                  if (state.loading) {
-                    return const ChatSkeletonComponent();
-                  }
+                  final List<Map<String, dynamic>> messages = state.results;
 
                   return BlocBuilder<PostMessageBloc, PostMessageState>(
                     builder: (context, state) {
