@@ -41,7 +41,7 @@ void main() {
     expect: () => [
       SearchQueryLoadingState(),
       SearchQuerySuccessState(
-        result: resultEmpty,
+        results: resultEmpty,
       ),
     ],
   );
@@ -70,7 +70,7 @@ void main() {
     expect: () => [
       SearchQueryLoadingState(),
       SearchQuerySuccessState(
-        result: resultNoEmpty,
+        results: resultNoEmpty,
       ),
     ],
   );

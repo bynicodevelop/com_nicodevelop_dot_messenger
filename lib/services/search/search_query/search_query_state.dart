@@ -11,16 +11,18 @@ class SearchQueryInitialState extends SearchQueryState {}
 
 class SearchQueryLoadingState extends SearchQueryState {}
 
-class SearchQuerySuccessState extends SearchQueryState {
-  final List<Map<String, dynamic>> result;
+class SearchQuerySuccessState extends SearchQueryState
+    implements GenericLoadedState {
+  @override
+  final List<Map<String, dynamic>> results;
 
   const SearchQuerySuccessState({
-    required this.result,
+    required this.results,
   });
 
   @override
   List<Object> get props => [
-        result,
+        results,
       ];
 }
 

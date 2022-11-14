@@ -13,19 +13,24 @@ class LeftColumnConstrainedBoxComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: (MediaQuery.of(context).size.width * 0.25) >= minWidth
-            ? MediaQuery.of(context).size.width * 0.25
-            : minWidth + 1,
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 16.0,
       ),
-      child: Column(
-        children: [
-          Expanded(
-            child: child,
-          ),
-          const BottomSideMenuComponent(),
-        ],
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: (MediaQuery.of(context).size.width * 0.25) >= minWidth
+              ? MediaQuery.of(context).size.width * 0.25
+              : minWidth + 1,
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: child,
+            ),
+            const BottomSideMenuComponent(),
+          ],
+        ),
       ),
     );
   }

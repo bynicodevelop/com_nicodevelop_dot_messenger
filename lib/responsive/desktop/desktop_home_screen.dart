@@ -4,10 +4,12 @@ import "package:com_nicodevelop_dotmessenger/components/chat_scaffold_component.
 import "package:com_nicodevelop_dotmessenger/components/left_column_constrained_box_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/list_group_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/message_editor_component.dart";
+import "package:com_nicodevelop_dotmessenger/components/skeletons/groups_skeletons_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/validate_account_component.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
+import "package:com_nicodevelop_dotmessenger/widgets/selected_discussion_wrapper_widget.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 
@@ -26,23 +28,26 @@ class DesktopHomeScreen extends StatelessWidget {
                 child: BlocBuilder<ListGroupBloc, ListGroupState>(
                   builder: (context, state) {
                     final List<Map<String, dynamic>> groups =
-                        (state as ListGroupInitialState).groups;
+                        (state as ListGroupInitialState).results;
 
-                    if (groups.isEmpty) {
+                    if (groups.isEmpty && !state.loading) {
                       return const Center(
                         child: Text("No groups"),
                       );
                     }
 
-                    return ListGroupComponent(
-                      onInit: () => openGroup(
-                        context,
-                        groups[0],
-                      ),
-                      groups: groups,
-                      onTap: (group) => openGroup(
-                        context,
-                        group,
+                    return GroupSkeletonsComponent(
+                      isLoading: state.loading,
+                      child: ListGroupComponent(
+                        onInit: () => openGroup(
+                          context,
+                          groups[0],
+                        ),
+                        groups: groups,
+                        onTap: (group) => openGroup(
+                          context,
+                          group,
+                        ),
                       ),
                     );
                   },
@@ -50,24 +55,35 @@ class DesktopHomeScreen extends StatelessWidget {
               ),
               Expanded(
                 flex: 4,
-                child: ChatScaffoldComponent(
-                  messages: const ChatMessageComponent(),
-                  editor: BlocBuilder<OpenGroupBloc, OpenGroupState>(
-                    builder: (context, state) {
-                      final Map<String, dynamic> group =
-                          (state as OpenChatInitialState).group;
+                child: BlocBuilder<OpenGroupBloc, OpenGroupState>(
+                  builder: (context, state) {
+                    final Map<String, dynamic> group =
+                        (state as OpenChatInitialState).group;
 
-                      return MessageEditorComponent(
-                        onSend: (message) {
-                          sendMessage(
-                            context,
-                            group,
-                            message,
+                    return SelectedDiscussionWrapperWidget(
+                      group: group,
+                      child: Builder(
+                        builder: (context) {
+                          return ChatScaffoldComponent(
+                            messages: const ChatMessageComponent(),
+                            editor: Builder(
+                              builder: (context) {
+                                return MessageEditorComponent(
+                                  onSend: (message) {
+                                    sendMessage(
+                                      context,
+                                      group,
+                                      message,
+                                    );
+                                  },
+                                );
+                              },
+                            ),
                           );
                         },
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
               Expanded(

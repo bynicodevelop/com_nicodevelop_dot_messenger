@@ -1,4 +1,5 @@
 import "package:com_nicodevelop_dotmessenger/components/list_group_component.dart";
+import "package:com_nicodevelop_dotmessenger/components/skeletons/groups_skeletons_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/validate_account_component.dart";
 import "package:com_nicodevelop_dotmessenger/responsive/mobile/components/mobile_app_bar_component.dart";
 import "package:com_nicodevelop_dotmessenger/responsive/mobile/screens/mobile_chat_screen.dart";
@@ -52,45 +53,45 @@ class _MobileHomeScreenState extends State<MobileHomeScreen> {
             BlocBuilder<ListGroupBloc, ListGroupState>(
               builder: (context, state) {
                 final List<Map<String, dynamic>> groups =
-                    (state as ListGroupInitialState).groups;
-
-                if (groups.isEmpty) {
-                  return const Center(
-                    child: Text("Aucune discussion"),
-                  );
-                }
+                    (state as ListGroupInitialState).results;
 
                 if (kIsWeb) {
-                  return ListGroupComponent(
-                    groups: groups,
-                    onTap: (Map<String, dynamic> group) async {
-                      openGroup(context, group);
+                  return GroupSkeletonsComponent(
+                    isLoading: state.loading,
+                    child: ListGroupComponent(
+                      groups: groups,
+                      onTap: (Map<String, dynamic> group) async {
+                        openGroup(context, group);
 
-                      _pageController.animateToPage(
-                        1,
-                        duration: const Duration(
-                          milliseconds: 300,
-                        ),
-                        curve: Curves.ease,
-                      );
-                    },
+                        _pageController.animateToPage(
+                          1,
+                          duration: const Duration(
+                            milliseconds: 300,
+                          ),
+                          curve: Curves.ease,
+                        );
+                      },
+                    ),
                   );
                 }
 
                 return SafeArea(
-                  child: ListGroupComponent(
-                    groups: groups,
-                    onTap: (Map<String, dynamic> group) async {
-                      openGroup(context, group);
+                  child: GroupSkeletonsComponent(
+                    isLoading: state.loading,
+                    child: ListGroupComponent(
+                      groups: groups,
+                      onTap: (Map<String, dynamic> group) async {
+                        openGroup(context, group);
 
-                      _pageController.animateToPage(
-                        1,
-                        duration: const Duration(
-                          milliseconds: 300,
-                        ),
-                        curve: Curves.ease,
-                      );
-                    },
+                        _pageController.animateToPage(
+                          1,
+                          duration: const Duration(
+                            milliseconds: 300,
+                          ),
+                          curve: Curves.ease,
+                        );
+                      },
+                    ),
                   ),
                 );
               },

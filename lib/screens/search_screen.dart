@@ -1,5 +1,6 @@
 import "dart:async";
 
+import "package:com_nicodevelop_dotmessenger/components/empty_wrapper_component.dart";
 import "package:com_nicodevelop_dotmessenger/components/responsive_component.dart";
 import "package:com_nicodevelop_dotmessenger/services/search/search_query/search_query_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/utils/helpers.dart";
@@ -120,16 +121,19 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               BlocBuilder<SearchQueryBloc, SearchQueryState>(
                   builder: (context, state) {
-                if (state is SearchQueryLoadingState) {
+                if (state is! SearchQuerySuccessState) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
 
-                if (state is SearchQuerySuccessState) {
-                  return ListView.builder(
+                final List<Map<String, dynamic>> results = state.results;
+
+                return EmptyWrapperComponent<SearchQueryBloc, SearchQueryState>(
+                  message: "No results found",
+                  child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: state.result.length,
+                    itemCount: results.length,
                     itemBuilder: (context, index) {
                       return Card(
                         child: ListTile(
@@ -137,18 +141,16 @@ class _SearchScreenState extends State<SearchScreen> {
                             Map<String, dynamic> openDiscussion = {
                               "users": [
                                 {
-                                  "uid": state.result[index]["uid"],
-                                  "displayName": state.result[index]
-                                      ["displayName"],
-                                  "photoURL": state.result[index]["photoURL"],
+                                  "uid": results[index]["uid"],
+                                  "displayName": results[index]["displayName"],
+                                  "photoURL": results[index]["photoURL"],
                                 }
                               ],
                             };
 
-                            if (state.result[index]["groupId"] != null &&
-                                trim(state.result[index]["groupId"]) != "") {
-                              openDiscussion["uid"] =
-                                  state.result[index]["groupId"];
+                            if (results[index]["groupId"] != null &&
+                                trim(results[index]["groupId"]) != "") {
+                              openDiscussion["uid"] = results[index]["groupId"];
                             }
 
                             info(
@@ -162,10 +164,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
                             widget.onSelected?.call();
                           },
-                          title: Text(state.result[index]["displayName"]),
+                          title: Text(results[index]["displayName"]),
                           leading: AvatarWidget(
-                            avatarUrl: state.result[index]["photoUrl"],
-                            username: state.result[index]["displayName"],
+                            avatarUrl: results[index]["photoUrl"],
+                            username: results[index]["displayName"],
                           ),
                           trailing: const Icon(
                             Icons.message_rounded,
@@ -173,10 +175,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                       );
                     },
-                  );
-                }
-
-                return const SizedBox.shrink();
+                  ),
+                );
               }),
             ],
           ),

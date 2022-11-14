@@ -31,7 +31,7 @@ void main() {
       expect: () => [
         const LoadMessagesInitialState(
           loading: true,
-          messages: [],
+          results: [],
         ),
       ],
       verify: (bloc) async {
@@ -72,7 +72,7 @@ void main() {
       expect: () => [
         const LoadMessagesInitialState(
           loading: false,
-          messages: [
+          results: [
             {
               "message": "message content",
               "isMe": false,
@@ -98,7 +98,7 @@ void main() {
       expect: () => [
         const LoadMessagesInitialState(
           loading: false,
-          messages: [],
+          results: [],
         ),
       ],
     );
