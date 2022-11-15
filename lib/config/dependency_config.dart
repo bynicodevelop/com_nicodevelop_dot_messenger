@@ -8,6 +8,7 @@ import "package:com_nicodevelop_dotmessenger/repositories/profile_repository.dar
 import "package:com_nicodevelop_dotmessenger/repositories/search_repository.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:firebase_core/firebase_core.dart";
+import "package:firebase_messaging/firebase_messaging.dart";
 import "package:flutter/foundation.dart";
 import "package:get_it/get_it.dart";
 import "package:injectable/injectable.dart";
@@ -50,6 +51,28 @@ $initGetIt(
       host,
       8080,
     );
+  }
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  print(settings);
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print("User granted permission");
+  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    print("User granted provisional permission");
+  } else {
+    print("User declined or has not accepted permission");
   }
 
   final gh = GetItHelper(getIt, environment);

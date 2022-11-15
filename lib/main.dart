@@ -9,11 +9,10 @@ import "package:com_nicodevelop_dotmessenger/services/service_factory.dart";
 import "package:com_nicodevelop_dotmessenger/utils/logger.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:firebase_ui_localizations/firebase_ui_localizations.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
 // ignore: depend_on_referenced_packages
 import "package:flutter_localizations/flutter_localizations.dart";
-import "package:flutter/foundation.dart";
-
-import "package:flutter/material.dart";
 import "package:flutter_native_splash/flutter_native_splash.dart";
 
 Future<void> main() async {
