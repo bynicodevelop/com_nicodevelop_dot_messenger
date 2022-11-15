@@ -114,7 +114,9 @@ class ChatRepository {
 
       final DocumentReference<Map<String, dynamic>> group =
           firestore.collection("groups").doc();
+
       data["groupId"] = group.id;
+
       await group.set({
         "users": [
           user.uid,
@@ -138,6 +140,7 @@ class ChatRepository {
       "message": data["message"],
       "sender": user.uid,
       "createdAt": DateTime.now().millisecondsSinceEpoch,
+      "isMe": true,
     };
   }
 }

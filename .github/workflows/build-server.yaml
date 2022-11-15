@@ -36,8 +36,14 @@ jobs:
       - name: Install dependencies
         run: npm --prefix server/functions ci
 
+      - name: Install Mail dependencies
+        run: npm --prefix server/functions/assets/mails i
+
       - name: Build functions
         run: npm --prefix server/functions run build
+
+      - name: Build des templates
+        run: npm --prefix server/functions/assets/mails run build
 
       - name: Create .env file
         id: env

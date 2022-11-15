@@ -215,6 +215,7 @@ void main() {
 
     setUp(() {
       firestore = FakeFirebaseFirestore();
+
       auth = MockFirebaseAuth(
         signedIn: true,
       );
@@ -233,7 +234,7 @@ void main() {
       );
 
       // ACT
-      await chatRepository.post({
+      Map<String, dynamic> result = await chatRepository.post({
         "groupId": "1",
         "message": "Hello world",
         "recipient": {"uid": "1"},
@@ -247,6 +248,8 @@ void main() {
           .get();
 
       expect(snapshot.docs.length, 1);
+      expect(result["isMe"], isTrue);
+      expect(result["sender"], auth.currentUser!.uid);
     });
 
     test("Doit permettre de poster un message avec succès en créant un groupe",
@@ -267,7 +270,7 @@ void main() {
       );
 
       // ACT
-      await chatRepository.post({
+      Map<String, dynamic> result = await chatRepository.post({
         "recipient": {"uid": "1"},
         "message": "Hello world",
       });
@@ -287,6 +290,7 @@ void main() {
 
       expect(snapshotMessage.docs.first.data()["sender"], "2");
       expect(snapshotMessage.docs.first.data()["message"], "Hello world");
+      expect(result["isMe"], isTrue);
     });
 
     test("Doit retourner une erreur si le message est vide", () async {
