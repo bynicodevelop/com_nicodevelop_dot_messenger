@@ -1,5 +1,6 @@
 import "package:com_nicodevelop_dotmessenger/repositories/chat_repository.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/group_repository.dart";
+import "package:com_nicodevelop_dotmessenger/repositories/notification_repository.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/profile_repository.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/search_repository.dart";
 import "package:com_nicodevelop_dotmessenger/services/auth/delete_account/delete_account_bloc.dart";
@@ -15,6 +16,7 @@ import "package:com_nicodevelop_dotmessenger/services/chat/load_messages/load_me
 import "package:com_nicodevelop_dotmessenger/services/chat/post_message/post_message_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/list_group/list_group_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/groups/open_group/open_group_bloc.dart";
+import "package:com_nicodevelop_dotmessenger/services/notifications/initialize_notification/initialize_notification_bloc.dart";
 import "package:com_nicodevelop_dotmessenger/services/search/search_query/search_query_bloc.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
@@ -24,6 +26,7 @@ class ServiceFactory extends StatelessWidget {
   final ChatRepository chatRepository;
   final ProfileRepository profileRepository;
   final SearchRepository searchRepository;
+  final NotificationRepository notificationRepository;
 
   final Widget child;
 
@@ -31,7 +34,8 @@ class ServiceFactory extends StatelessWidget {
     this.groupRepository,
     this.chatRepository,
     this.profileRepository,
-    this.searchRepository, {
+    this.searchRepository,
+    this.notificationRepository, {
     super.key,
     required this.child,
   });
@@ -109,6 +113,11 @@ class ServiceFactory extends StatelessWidget {
         BlocProvider<PostMessageBloc>(
           create: (_) => PostMessageBloc(
             chatRepository,
+          ),
+        ),
+        BlocProvider<InitializeNotificationBloc>(
+          create: (_) => InitializeNotificationBloc(
+            notificationRepository,
           ),
         ),
       ],

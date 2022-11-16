@@ -1,12 +1,12 @@
 import "package:com_nicodevelop_dotmessenger/exceptions/abstract_exception.dart";
 
-class AuthenticationException implements AbstractException {
+class NotificationException implements AbstractException {
   @override
   final String message;
   @override
   final String code;
 
-  const AuthenticationException(
+  const NotificationException(
     this.message,
     this.code,
   );

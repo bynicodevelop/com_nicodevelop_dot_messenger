@@ -1,6 +1,7 @@
 import "package:com_nicodevelop_dotmessenger/config/dependency_config.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/chat_repository.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/group_repository.dart";
+import "package:com_nicodevelop_dotmessenger/repositories/notification_repository.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/profile_repository.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/search_repository.dart";
 import "package:com_nicodevelop_dotmessenger/screens/home_screen.dart";
@@ -56,6 +57,7 @@ class App extends StatelessWidget {
       getIt.get<ChatRepository>(),
       getIt.get<ProfileRepository>(),
       getIt.get<SearchRepository>(),
+      getIt.get<NotificationRepository>(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         localizationsDelegates: [

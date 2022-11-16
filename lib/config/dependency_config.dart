@@ -4,6 +4,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:com_nicodevelop_dotmessenger/firebase_options.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/chat_repository.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/group_repository.dart";
+import "package:com_nicodevelop_dotmessenger/repositories/notification_repository.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/profile_repository.dart";
 import "package:com_nicodevelop_dotmessenger/repositories/search_repository.dart";
 import "package:firebase_auth/firebase_auth.dart";
@@ -55,26 +56,6 @@ $initGetIt(
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-
-  print(settings);
-
-  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    print("User granted permission");
-  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-    print("User granted provisional permission");
-  } else {
-    print("User declined or has not accepted permission");
-  }
-
   final gh = GetItHelper(getIt, environment);
 
   gh.factory<GroupRepository>(
@@ -100,6 +81,14 @@ $initGetIt(
     () => SearchRepository(
       FirebaseFirestore.instance,
       FirebaseAuth.instance,
+    ),
+  );
+
+  gh.factory<NotificationRepository>(
+    () => NotificationRepository(
+      FirebaseAuth.instance,
+      FirebaseFirestore.instance,
+      messaging,
     ),
   );
 }
